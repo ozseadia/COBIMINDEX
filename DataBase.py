@@ -17,10 +17,10 @@ dirname = os.path.dirname(__file__)
 global Lexicon
 rootPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\הערות פיתוח פנימי\data'
 #DataPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\Data\data.xlsx'
-DataPath=os.path.join(dirname, 'Data\data.xlsx')
-Table_actions=pd.read_excel(os.path.join(dirname, 'Data\checkWork - 25.06.23.xlsx'),sheet_name='actions')
-Table_tech=pd.read_excel(os.path.join(dirname, 'Data\checkWork - 25.06.23.xlsx'),sheet_name='techniques')
-Table_Level=pd.read_excel(os.path.join(dirname, 'Data\checkWork - 25.06.23.xlsx'),sheet_name='levels')
+DataPath=os.path.join(dirname, 'Data/data.xlsx')
+Table_actions=pd.read_excel(os.path.join(dirname,'Data/checkWork - 25.06.23.xlsx'),sheet_name='actions')
+Table_tech=pd.read_excel(os.path.join(dirname,'Data/checkWork - 25.06.23.xlsx'),sheet_name='techniques')
+Table_Level=pd.read_excel(os.path.join(dirname,'Data/checkWork - 25.06.23.xlsx'),sheet_name='levels')
 
 #CSVFiles=os.listdir(rootPath)
 
