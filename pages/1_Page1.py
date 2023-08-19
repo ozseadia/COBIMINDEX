@@ -129,5 +129,5 @@ if not(NAME=='.....'):
             Refrash(ind,PP)
             
     with open(filename, 'rb') as my_file:
-        st.download_button(label = 'Download', data = my_file, file_name = 'filename.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')   
+        st.download_button(label = 'Download', data = my_file, file_name = filename, mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')   
         
