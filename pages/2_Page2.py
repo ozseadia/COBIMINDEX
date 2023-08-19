@@ -124,7 +124,7 @@ if not(SW=='...'):
             Table2=DB.userData(V,date,NAME,TypeSession)
             #C=Chart_data(Table2)
             st.title(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ NAME + ' ' + TypeSession+ ' indexes results')
-            st.dataframe(Table2.style.applymap(highlight_cols).set_precision(0))
+            st.dataframe(Table2.style.applymap(highlight_cols).format(precision=0))
             #st.altair_chart(C)
             st.subheader('SUDS Power')
             plot=Ploty(Table2,'sud power')
