@@ -130,7 +130,7 @@ with placeholder1.container():
     Tc=ComplinesTable(TABLE)
     #Tc.set_precision(0)
     st.dataframe(Tc.style.applymap(highlight_cols1,
-                                   subset = pd.IndexSlice[['Lag days in current Level','Total Lag days'],:]))
+                                   subset = pd.IndexSlice[['Lag days in current Level','Total Lag days'],:]).format(precision=0))
     st.subheader('Index table')
     col1,col2 = st.columns([1,3])
     with col1:
@@ -139,7 +139,7 @@ with placeholder1.container():
     Ti=IndexTable(TABLE)
     #Ti.set_precision(0)
     st.dataframe(Ti.style.applymap(highlight_cols,
-                                   ))
+                                   ).format(precision=0))
     
 
 options=list(TABLE.keys())
