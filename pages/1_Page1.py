@@ -128,6 +128,6 @@ if not(NAME=='.....'):
             excelupdate1(Status,int(ind[0]+2))
             Refrash(ind,PP)
             
-    with open(filename, 'rb') as my_file:
-        st.download_button(label = 'Download', data = my_file, file_name = 'acount and passwords.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')   
-        
+with open(filename, 'rb') as my_file:
+    st.download_button(label = 'Download', data = my_file, file_name = 'acount and passwords.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')   
+    
