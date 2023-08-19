@@ -32,9 +32,12 @@ S_options=['...',
            'Noa Shultz','Hila Askayo','Ganit Goren']
 
 SW=st.sidebar.selectbox('Assigned Coordinator/Therapist',S_options)
-rootPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes'
-filename=os.path.join(rootPath,'Data/acount and passwords.xlsx')
+# rootPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes'
+# filename=os.path.join(rootPath,'Data/acount and passwords.xlsx')
+dirname = os.path.dirname(__file__)
+filename=os.path.join(dirname,'../Data/acount and passwords.xlsx')
 Table_acounts=pd.read_excel(filename)
+
 
 def highlight_max(x, color):
     return np.where(x <=-10, "background-color: {color}", None)
