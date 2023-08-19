@@ -154,7 +154,7 @@ if not (NAME==options[0]):
         Table2=DB.userData(V,date,NAME,TypeSession)
         #C=Chart_data(Table2)
         st.title(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ NAME + ' ' + TypeSession+ ' indexes results')
-        st.dataframe(Table2.style.applymap(highlight_cols).set_precision(0))
+        st.dataframe(Table2.style.applymap(highlight_cols).format(precision=0))
         #st.altair_chart(C)
         st.subheader('SUDS Power')
         plot=Ploty(Table2,'sud power')
@@ -179,6 +179,6 @@ if not (NAME==options[0]):
         st.title(':clipboard: Patient '+NAME +' exercises table ')
         Table3=DB.technics(V,NAME,date)
         #df1=Table3.iloc[:, 2:4]
-        st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.hide_index().set_precision(0))
+        st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.hide_index().format(precision=0))
         #st.text(userID)
         

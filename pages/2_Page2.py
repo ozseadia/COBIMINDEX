@@ -101,7 +101,7 @@ if not(SW=='...'):
         st.subheader(" :woman-running: :runner: Patients' Complince table")
         Tc=ComplinesTable(TABLE)
         st.dataframe(Tc.style.applymap(highlight_cols1,
-                                       subset = pd.IndexSlice[['Lag days in current Level','Total Lag days'],:]).set_precision(0))
+                                       subset = pd.IndexSlice[['Lag days in current Level','Total Lag days'],:]).format(precision=0))
         st.subheader("Patients' Index table")
         col1,col2 = st.columns([1,3])
         with col1:
@@ -109,7 +109,7 @@ if not(SW=='...'):
         TABLE=DB.Table1(V,date,ids_List,TypeSession,'.....')
         Ti=IndexTable(TABLE)
         st.dataframe(Ti.style.applymap(highlight_cols,
-                                       ).set_precision(0))
+                                       ).format(precision=0))
     
 
     options=list(TABLE.keys())
@@ -149,5 +149,5 @@ if not(SW=='...'):
             st.title(':clipboard: Patient '+NAME +' exercises table ')
             Table3=DB.technics(V,NAME,date)
             #df1=Table3.iloc[:, 2:4]
-            st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.hide_index().set_precision(0))
+            st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.hide_index().format(precision=0))
             #st.text(userID)
