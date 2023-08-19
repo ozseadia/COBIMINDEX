@@ -128,7 +128,7 @@ placeholder1 = st.empty()
 with placeholder1.container():
     st.subheader('Complince table')
     Tc=ComplinesTable(TABLE)
-    Tc.set_precision(0)
+    #Tc.set_precision(0)
     st.dataframe(Tc.style.applymap(highlight_cols1,
                                    subset = pd.IndexSlice[['Lag days in current Level','Total Lag days'],:]))
     st.subheader('Index table')
@@ -137,7 +137,7 @@ with placeholder1.container():
         TypeSession=st.selectbox('Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
     TABLE=DB.Table1(V,date,ActiveUsers_id,TypeSession,'.....')
     Ti=IndexTable(TABLE)
-    Ti.set_precision(0)
+    #Ti.set_precision(0)
     st.dataframe(Ti.style.applymap(highlight_cols,
                                    ))
     
