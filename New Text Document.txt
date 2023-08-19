@@ -1,0 +1,3 @@
+streamlit run G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\DeshbordAPP.py
+
+http://ec2-3-123-19-109.eu-central-1.compute.amazonaws.com:8080/api/v1/export_data/excel
