@@ -149,5 +149,5 @@ if not(SW=='...'):
             st.title(':clipboard: Patient '+NAME +' exercises table ')
             Table3=DB.technics(V,NAME,date)
             #df1=Table3.iloc[:, 2:4]
-            st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.hide_index().format(precision=0))
+            st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.format(precision=0))
             #st.text(userID)
