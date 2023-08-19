@@ -11,14 +11,24 @@ import time
 from datetime import datetime ,timedelta
 import numpy as np
 # Specify the path to your CSV file
+dirname = os.path.dirname(__file__)
+#path_svg = os.path.join(dirname, 'pages\SVG\OpenScreenLogo.svg')
 
 global Lexicon
 rootPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\הערות פיתוח פנימי\data'
-DataPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\Data\data.xlsx'
-CSVFiles=os.listdir(rootPath)
-Table_actions=pd.read_excel(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\הערות פיתוח פנימי\checkWork - 25.06.23.xlsx',sheet_name='actions')
-Table_tech=pd.read_excel(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\הערות פיתוח פנימי\checkWork - 25.06.23.xlsx',sheet_name='techniques')
-Table_Level=pd.read_excel(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\הערות פיתוח פנימי\checkWork - 25.06.23.xlsx',sheet_name='levels')
+#DataPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\Data\data.xlsx'
+DataPath=os.path.join(dirname, 'Data\data.xlsx')
+Table_actions=pd.read_excel(os.path.join(dirname, 'Data\checkWork - 25.06.23.xlsx'),sheet_name='actions')
+Table_tech=pd.read_excel(os.path.join(dirname, 'Data\checkWork - 25.06.23.xlsx'),sheet_name='techniques')
+Table_Level=pd.read_excel(os.path.join(dirname, 'Data\checkWork - 25.06.23.xlsx'),sheet_name='levels')
+
+#CSVFiles=os.listdir(rootPath)
+
+
+
+#Table_actions=pd.read_excel(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\הערות פיתוח פנימי\checkWork - 25.06.23.xlsx',sheet_name='actions')
+#Table_tech=pd.read_excel(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\הערות פיתוח פנימי\checkWork - 25.06.23.xlsx',sheet_name='techniques')
+#Table_Level=pd.read_excel(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\הערות פיתוח פנימי\checkWork - 25.06.23.xlsx',sheet_name='levels')
 
 Lexicon=pd.DataFrame({'technic number':list(Table_tech['מספר טכניקה']),
                'technic name':list(Table_tech['שם טכניקה']),

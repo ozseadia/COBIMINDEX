@@ -15,15 +15,18 @@ import plotly.graph_objects as go
 from PIL import Image
 import re
 import base64
-
+import os
 
 global path_svg
+dirname = os.path.dirname(__file__)
+path_svg = os.path.join(dirname, 'pages\SVG\OpenScreenLogo.svg')
 
-path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
+
+#path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
 #image = Image.open(SVG_path)
 st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
-def read_svg(path_svg):
+def read_svg(path_svg=path_svg):
     """Get a SVG file as HTML
 
     Args:
@@ -116,7 +119,7 @@ def IndexTable(TABLE):
 #st.image(image,width=100) 
 #st.markdown("<br>", unsafe_allow_html=True)
 #render_svg(read_svg(r"src/undraw_Decide_re_ixfw.svg"))
-render_svg(read_svg(path_svg))
+render_svg(read_svg())
 st.title('Dash Board')
 V,date,userid,ActiveUsers_id=DB.start()
 TABLE=DB.Table1(V,date,ActiveUsers_id,'Morning','.....')

@@ -18,8 +18,8 @@ import plotly.express as px
 import DeshbordAPP as De
 
 st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
-path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
-De.render_svg(De.read_svg(path_svg))
+#path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
+De.render_svg(De.read_svg())
 S_options=['...',
            'Naama Peled-Ironi',
            'Milca Hanukoglu',

@@ -15,12 +15,13 @@ import DeshbordAPP as De
 from PIL import Image
 
 global path_svg
-path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
+#path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
 st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
 
-rootPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes'
-filename=os.path.join(rootPath,'Data/acount and passwords.xlsx')
+#rootPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes'
+dirname = os.path.dirname(__file__)
+filename=os.path.join(dirname,'../Data/acount and passwords.xlsx')
 Table_acounts=pd.read_excel(filename)
 
 #SetUp 
@@ -84,7 +85,7 @@ def Refrash(ind,PP):
     PP.dataframe(Table_acounts.iloc[ind,[0,2,3,4,5,6,7,8,9,10,11]])
     
 
-De.render_svg(De.read_svg(path_svg))
+De.render_svg(De.read_svg())
 st.title('Patient details settings')
 options=list(Table_acounts.acount)
 options.insert(0,'.....')
