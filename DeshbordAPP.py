@@ -19,7 +19,7 @@ import os
 
 global path_svg
 dirname = os.path.dirname(__file__)
-path_svg = os.path.join(dirname, 'pages\SVG\OpenScreenLogo.svg')
+path_svg = os.path.join(dirname, 'pages/SVG/OpenScreenLogo.svg')
 
 
 #path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
