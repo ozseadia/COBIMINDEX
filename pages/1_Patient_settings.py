@@ -11,7 +11,7 @@ from datetime import timedelta ,datetime
 import numpy as np
 import streamlit as st
 import openpyxl
-import DeshbordAPP as De
+import Home as De
 from PIL import Image
 
 global path_svg

@@ -15,7 +15,7 @@ import pandas as pd
 import numpy as np
 import altair as alt
 import plotly.express as px 
-import DeshbordAPP as De
+import Home as De
 
 st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 #path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
