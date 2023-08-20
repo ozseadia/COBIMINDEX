@@ -167,21 +167,23 @@ def Index(V,userid,date,TypeSession,Patient):
     else:
         try:
             t=V['Session'].query('userId == @userid')
-            N=(datetime.strptime(date[0],"%Y-%m-%d")-datetime.strptime(t.iloc[0].startSession,"%Y-%m-%d %H:%M:%S")).days
+            N=(datetime.strptime(date[0],"%Y-%m-%d")-datetime.strptime(t.iloc[0].startSession,"%Y-%m-%d %H:%M:%S")).days+3
             if N<=1:
                 N=2
         except:
             N=2
-    # D=datetime.strptime(date[0], "%Y-%m-%d")
-    # D=str(D.date())        
-    # Dateslist.append(D)        
+    #D=datetime.strptime(date[0], "%Y-%m-%d")
+    #D=str(D.date())        
+    #Dateslist.append(D)        
     for j in range(1,N):
-        D=datetime.strptime(date[0], "%Y-%m-%d")-timedelta(days=j)
-        D=str(D.date())
+        #D=datetime.strptime(date[0], "%Y-%m-%d")-timedelta(days=j)
+        #D=str(D.date())
         D1=datetime.strptime(date[0], "%Y-%m-%d")-timedelta(days=j-1)
+        D=D1-timedelta(days=1)
+        D=str(D.date())
         D1=str(D1.date())
         Dateslist.append(D1)
-        a=V['Session'].query('endSession >= @D and endSession < @D1 and userId == @userid and typeSession==@TypeSession')
+        a=V['Session'].query('endSession >@D and endSession <= @D1 and userId == @userid and typeSession==@TypeSession')
         print(a)
         if len(a)>0:
             sud1.append(a.iloc[0].sudsQ1) ;sud2.append(a.iloc[0].sudsQ2);sudPower.append(a.iloc[0].sudsQ2*(a.iloc[0].sudsQ1-a.iloc[0].sudsQ2))
@@ -241,7 +243,7 @@ def Convert_acount2id(V,userName):
     return userID
 
 def userData(V,date,userName,TypeSession):
-    userID=int(V['App_user'].id[V['App_user'].username==int(userName)].values)
+    userID=float(V['App_user'].id[V['App_user'].username==int(userName)].values)
     temp=Index(V,userID,date,TypeSession,userName)
     
     

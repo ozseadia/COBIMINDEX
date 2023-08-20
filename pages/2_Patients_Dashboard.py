@@ -86,20 +86,35 @@ def IndexTable(TABLE):
 def Extract_Patien_List():
     a=Table_acounts.query('Therapist==@SW or Coordinator==@SW')
     return a['acount']
+def Extract_Patien_ListAppId():
+    a=Table_acounts.query('Therapist==@SW or Coordinator==@SW')
+    return a
+def ReplaceKeys(T,PatientList):
+    for i in PatientList.index:
+        T.columns = T.columns.str.replace(str(PatientList['acount'][i]), str(PatientList['Patient_ID'][i]))
+    return(T)
+def ConvertPatienID2Acount(PatienID,PatientList):
+    return(PatientList['acount'][PatientList['Patient_ID']==PatientID].iloc[0])
+   
     
 st.title('Dash Board')
 V,date,userid,ActiveUsers_id=DB.start()
 if not(SW=='...'):
-    PatientList=Extract_Patien_List()
+    PatientList=Extract_Patien_ListAppId()
+    #PatientList=Extract_Patien_List()
     ids_List=[]
-    for temp in PatientList:
+    for temp in PatientList['acount']:
         ids_List.append(DB.Convert_acount2id(V,temp))
     TABLE=DB.Table1(V,date,ids_List,'Morning','.....')
+    
 #TABLE.style.apply(highlight_max, color='red')
     placeholder1 = st.empty()
     with placeholder1.container():
         st.subheader(" :woman-running: :runner: Patients' Complince table")
         Tc=ComplinesTable(TABLE)
+        Tc=ReplaceKeys(Tc,PatientList)
+            
+            
         st.dataframe(Tc.style.applymap(highlight_cols1,
                                        subset = pd.IndexSlice[['Lag days in current Level','Total Lag days'],:]).format(precision=0))
         st.subheader("Patients' Index table")
@@ -108,14 +123,16 @@ if not(SW=='...'):
             TypeSession=st.selectbox('Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
         TABLE=DB.Table1(V,date,ids_List,TypeSession,'.....')
         Ti=IndexTable(TABLE)
+        Ti=ReplaceKeys(Ti,PatientList)
         st.dataframe(Ti.style.applymap(highlight_cols,
                                        ).format(precision=0))
     
-
-    options=list(TABLE.keys())
+    
+    options=list(PatientList['Patient_ID'])
     options.insert(0,'.....')
-    NAME=st.sidebar.selectbox('Select Patient', options)
-    if not (NAME==options[0]):
+    PatientID=st.sidebar.selectbox('Select Patient', options)
+    if not (PatientID==options[0]):
+        NAME=str(ConvertPatienID2Acount(PatientID,PatientList))
         placeholder1.empty()
         with placeholder1.container():
             col1,col2 = st.columns([1,3])
@@ -123,7 +140,7 @@ if not(SW=='...'):
                 TypeSession=st.selectbox('Please Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
             Table2=DB.userData(V,date,NAME,TypeSession)
             #C=Chart_data(Table2)
-            st.title(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ NAME + ' ' + TypeSession+ ' indexes results')
+            st.title(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ PatientID + ' ' + TypeSession+ ' indexes results')
             st.dataframe(Table2.style.applymap(highlight_cols).format(precision=0))
             #st.altair_chart(C)
             st.subheader('SUDS Power')
@@ -146,7 +163,7 @@ if not(SW=='...'):
     
             #st.bar_chart(pd.DataFrame(chart_data))
             #userID=str(V['App_user'].id[V['App_user'].username==int(NAME)].values)[1:-1]
-            st.title(':clipboard: Patient '+NAME +' exercises table ')
+            st.title(':clipboard: Patient '+PatientID +' exercises table ')
             Table3=DB.technics(V,NAME,date)
             #df1=Table3.iloc[:, 2:4]
             st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.format(precision=0))
