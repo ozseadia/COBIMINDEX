@@ -55,6 +55,7 @@ def excelupdate(PatientNumber,SW,Cordinator,ind,T1,T2,T3,T4,T5):
     ws.cell(row=ind, column=10).value=T4.strftime('%Y-%m-%d')
     ws.cell(row=ind, column=11).value=T5.strftime('%Y-%m-%d')
     wb.save(filename)
+    return '.....'
     # writer = pd.ExcelWriter(filename, engine='openpyxl') 
     # writer.book = book
     # writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
@@ -76,6 +77,7 @@ def excelupdate1(Status,ind):
         ws=wb['Sheet1']
         ws.cell(row=ind, column=12).value=Status
         wb.save(filename)
+        
         
 
 
@@ -117,13 +119,13 @@ if not(NAME=='.....'):
             T5=st.date_input('T5 start date',datetime.strptime(Table_acounts['T5'][ind].iloc[0],"%Y-%m-%d").date())
             
     if st.button('Update'):
-        excelupdate(PatienNamber,SW,Cordinator,int(ind[0])+2,T1,T2,T3,T4,T5)
+        NAME=excelupdate(PatienNamber,SW,Cordinator,int(ind[0])+2,T1,T2,T3,T4,T5)
         time.sleep(0.5)
         Refrash(ind,PP)
         
     col4, col5 ,col6 = st.columns(3)
     with col4:    
-        Status=st.selectbox('Patient Status',['Working_ok','Need_attention','blocked'])
+        Status=st.selectbox('Patient Status',['New','Working_ok','Need_attention','blocked'])
         if st.button('Submit status'):
             excelupdate1(Status,int(ind[0]+2))
             Refrash(ind,PP)
