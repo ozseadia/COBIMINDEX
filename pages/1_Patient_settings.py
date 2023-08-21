@@ -91,7 +91,7 @@ De.render_svg(De.read_svg())
 st.title('Patient details settings')
 options=list(Table_acounts.acount)
 options.insert(0,'.....')
-NAME=st.sidebar.selectbox('Select Patient', options)
+NAME=st.sidebar.selectbox('Select Patient', options,placeholder='select')
 if not(NAME=='.....'):
     ind=Table_acounts.index[Table_acounts['acount']==int(NAME)]
     PP=st.dataframe(Table_acounts.iloc[ind,[0,2,3,4,5,6,7,8,9,10,11]])
