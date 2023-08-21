@@ -87,19 +87,26 @@ def Refrash(ind,PP):
     PP.dataframe(Table_acounts.iloc[ind,[0,2,3,4,5,6,7,8,9,10,11]])
     
 
+def clear_text():
+    st.session_state["text"]=""
+
+#st.session_state["text"]=""
 De.render_svg(De.read_svg())
 st.title('Patient details settings')
 options=list(Table_acounts.acount)
 options.insert(0,'.....')
-NAME=st.sidebar.selectbox('Select Patient', options,placeholder='select')
+NAME=st.sidebar.selectbox('Select Patient', options,placeholder='select',on_change=clear_text)
+
 if not(NAME=='.....'):
     ind=Table_acounts.index[Table_acounts['acount']==int(NAME)]
     PP=st.dataframe(Table_acounts.iloc[ind,[0,2,3,4,5,6,7,8,9,10,11]])
     col1, col2 ,col3 = st.columns(3)
     with col1:
+        #clear_text()
         Cordinator=st.selectbox('Assigned Coordinator',Cor_options)
         SW=st.selectbox('Assigned Therapist',S_options)
-        PatienNamber=st.text_input('Patient ID')
+        PatienNamber=st.text_input('Patient ID', key="text")
+            #PatienNamber=st.text_input('Patient ID')
     if (Table_acounts.iloc[ind,[6,7,8,9,10]]).isnull().values.any():
         with col2:
         #today = datetime.datetime.now().date()
@@ -108,7 +115,8 @@ if not(NAME=='.....'):
             T3=st.date_input('T3 start date',datetime.now().date()+timedelta(days=90*2))
         with col3:    
             T4=st.date_input('T4 start date',datetime.now().date()+timedelta(days=90*3))
-            T5=st.date_input('T5 start date',datetime.now().date()+timedelta(days=90*4)) 
+            T5=st.date_input('T5 start date',datetime.now().date()+timedelta(days=90*4))
+            
     else:
         with col2:            
             T1=st.date_input('T1 start date',datetime.strptime(Table_acounts['T1'][ind].iloc[0],"%Y-%m-%d").date())
@@ -122,6 +130,8 @@ if not(NAME=='.....'):
         NAME=excelupdate(PatienNamber,SW,Cordinator,int(ind[0])+2,T1,T2,T3,T4,T5)
         time.sleep(0.5)
         Refrash(ind,PP)
+        
+        
         
     col4, col5 ,col6 = st.columns(3)
     with col4:    
