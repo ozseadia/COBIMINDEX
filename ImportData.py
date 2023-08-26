@@ -13,4 +13,4 @@ webdriver = Edge()
 response = webdriver.request('GET', url)
 
 print(r.text) 
-requests.post(url, data = myInput)
+#requests.post(url, data = myInput)

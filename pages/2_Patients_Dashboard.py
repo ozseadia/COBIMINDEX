@@ -30,8 +30,11 @@ S_options=['...',
            'Shachar Michael',
            'Zohar Peled-Zinger',
            'Noa Shultz','Hila Askayo','Ganit Goren']
+@st.cache_data()
+def EnableAll():
+    st.session_state['Patients']=1
 
-SW=st.sidebar.selectbox('Assigned Coordinator/Therapist',S_options)
+SW=st.sidebar.selectbox('Assigned Coordinator/Therapist',S_options,on_change=EnableAll())
 # rootPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes'
 # filename=os.path.join(rootPath,'Data/acount and passwords.xlsx')
 dirname = os.path.dirname(__file__)
@@ -109,29 +112,31 @@ if not(SW=='...'):
     
 #TABLE.style.apply(highlight_max, color='red')
     placeholder1 = st.empty()
-    with placeholder1.container():
-        st.subheader(" :woman-running: :runner: Patients' Complince table")
-        Tc=ComplinesTable(TABLE)
-        Tc=ReplaceKeys(Tc,PatientList)
-            
-            
-        st.dataframe(Tc.style.applymap(highlight_cols1,
-                                       subset = pd.IndexSlice[['Lag days in current Level','Total Lag days'],:]).format(precision=0))
-        st.subheader("Patients' Index table")
-        col1,col2 = st.columns([1,3])
-        with col1:
-            TypeSession=st.selectbox('Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
-        TABLE=DB.Table1(V,date,ids_List,TypeSession,'.....')
-        Ti=IndexTable(TABLE)
-        Ti=ReplaceKeys(Ti,PatientList)
-        st.dataframe(Ti.style.applymap(highlight_cols,
-                                       ).format(precision=0))
+    if st.session_state['Patients']>=1:
+        with placeholder1.container():
+            st.subheader(" :woman-running: :runner: Patients' Complince table")
+            Tc=ComplinesTable(TABLE)
+            Tc=ReplaceKeys(Tc,PatientList)
+                
+                
+            st.dataframe(Tc.style.applymap(highlight_cols1,
+                                           subset = pd.IndexSlice[['Lag days in current Level','Total Lag days'],:]).format(precision=0))
+            st.subheader("Patients' Index table")
+            col1,col2 = st.columns([1,3])
+            with col1:
+                TypeSession=st.selectbox('Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
+            TABLE=DB.Table1(V,date,ids_List,TypeSession,'.....')
+            Ti=IndexTable(TABLE)
+            Ti=ReplaceKeys(Ti,PatientList)
+            st.dataframe(Ti.style.applymap(highlight_cols,
+                                           ).format(precision=0))
     
     
     options=list(PatientList['Patient_ID'])
     options.insert(0,'.....')
     PatientID=st.sidebar.selectbox('Select Patient', options)
     if not (PatientID==options[0]):
+        st.session_state['Patients']=0
         NAME=str(ConvertPatienID2Acount(PatientID,PatientList))
         placeholder1.empty()
         with placeholder1.container():
@@ -168,3 +173,8 @@ if not(SW=='...'):
             #df1=Table3.iloc[:, 2:4]
             st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.format(precision=0))
             #st.text(userID)
+    else :
+        st.session_state['Patients']+=1
+        if st.session_state['Patients']==1 :
+            st.experimental_rerun()
+            

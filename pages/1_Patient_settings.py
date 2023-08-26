@@ -95,6 +95,7 @@ De.render_svg(De.read_svg())
 st.title('Patient details settings')
 options=list(Table_acounts.acount)
 options.insert(0,'.....')
+
 NAME=st.sidebar.selectbox('Select Patient', options,placeholder='select',on_change=clear_text)
 
 if not(NAME=='.....'):
