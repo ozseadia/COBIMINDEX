@@ -96,7 +96,29 @@ def Chart_data(Table2):
     color='Ind:N',
     column='Date:N')
     return(C)
-
+def PlotyCandlestick(Table2,Ind):
+    #plot=px.bar(x=Table2.index,y=Table2[Ind])
+    Topen=Ind+"1"
+    Tclose=Ind+"2"
+    
+    if Ind=='well':
+        plot = go.Figure(data=[go.Candlestick(x=Table2.index,
+                    open=Table2[Topen],
+                    high=Table2[[Topen,Tclose]].max(axis=1),
+                    low=Table2[[Topen,Tclose]].min(axis=1),
+                    close=Table2[Tclose],
+                    increasing_line_color= 'green', decreasing_line_color= 'red')])
+    else:
+        plot = go.Figure(data=[go.Candlestick(x=Table2.index,
+                    open=Table2[Topen],
+                    high=Table2[[Topen,Tclose]].max(axis=1),
+                    low=Table2[[Topen,Tclose]].min(axis=1),
+                    close=Table2[Tclose],
+                    increasing_line_color= 'red', decreasing_line_color= 'green')])
+        
+    plot.update_layout(xaxis_rangeslider_visible=False)
+    #plot['layout']['xaxis']['autorange'] = "reversed"
+    return plot
 def Ploty(Table2,Ind):
     plot=px.bar(x=Table2.index,y=Table2[Ind])
     #plot['layout']['xaxis']['autorange'] = "reversed"
@@ -165,21 +187,21 @@ if not (NAME==options[0]):
         st.title(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ NAME + ' ' + TypeSession+ ' indexes results')
         st.dataframe(Table2.style.applymap(highlight_cols).format(precision=0))
         #st.altair_chart(C)
-        st.subheader('SUDS Power')
-        plot=Ploty(Table2,'sud power')
-        plot=PlotyMulty(Table2)
+        st.subheader('SUD')
+        plot=PlotyCandlestick(Table2,'sud')
+        #plot=De.PlotyMulty(Table2)
         st.plotly_chart(plot)
         #st.bar_chart(Table2['sud power'])
-        st.subheader('VAS Power')
-        plot=Ploty(Table2,'vas power')
+        st.subheader('VAS')
+        plot=PlotyCandlestick(Table2,'vas')
         st.plotly_chart(plot)
         #st.bar_chart(Table2['vas power'])
-        st.subheader('Fatigue Power')
-        plot=Ploty(Table2,'fat power')
+        st.subheader('Fatigue')
+        plot=PlotyCandlestick(Table2,'fat')
         st.plotly_chart(plot)
         #st.bar_chart(Table2['fat power'])
-        st.subheader('Well being Power')
-        plot=Ploty(Table2,'well power')
+        st.subheader('Well being')
+        plot=PlotyCandlestick(Table2,'well')
         st.plotly_chart(plot)
         #st.bar_chart(Table2['well power'])
 
