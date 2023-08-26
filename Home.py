@@ -117,7 +117,8 @@ def IndexTable(TABLE):
 @st.cache_data
 def Start():
     st.session_state['Start']=1
-@st.cache_data
+    return (st.session_state['Start'])
+@st.cache_data(ttl=3600)
 def load_data(temp):
     V,date,userid,ActiveUsers_id=DB.start()
     return (V,date,userid,ActiveUsers_id)
@@ -128,7 +129,7 @@ def load_data(temp):
 #render_svg(read_svg(r"src/undraw_Decide_re_ixfw.svg"))
 render_svg(read_svg())
 st.title('Dash Board')
-V,date,userid,ActiveUsers_id=load_data(Start())
+V,date,userid,ActiveUsers_id=load_data(temp=Start())
 #V,date,userid,ActiveUsers_id=DB.start()
 TABLE=DB.Table1(V,date,ActiveUsers_id,'Morning','.....')
 #TABLE.style.apply(highlight_max, color='red')

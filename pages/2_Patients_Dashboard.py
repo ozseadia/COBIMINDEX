@@ -35,6 +35,9 @@ def EnableAll():
     st.session_state['Patients']=1
 
 SW=st.sidebar.selectbox('Assigned Coordinator/Therapist',S_options,on_change=EnableAll())
+#SW=st.sidebar.selectbox('Assigned Coordinator/Therapist',S_options)
+#time.sleep(1)
+#EnableAll(SW)
 # rootPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes'
 # filename=os.path.join(rootPath,'Data/acount and passwords.xlsx')
 dirname = os.path.dirname(__file__)
@@ -174,7 +177,8 @@ if not(SW=='...'):
             st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.format(precision=0))
             #st.text(userID)
     else :
-        st.session_state['Patients']+=2
+        st.session_state['Patients']+=1
+        time.sleep(1)
         if st.session_state['Patients']==1 :
             st.experimental_rerun()
             
