@@ -173,6 +173,7 @@ if not(SW=='...'):
             col1,col2 = st.columns([1,3])
             with col1:
                 TypeSession=st.selectbox('Please Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
+                time.sleep(1)   
             Table2=DB.userData(V,date,NAME,TypeSession)
             #C=Chart_data(Table2)
             st.title(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ PatientID + ' ' + TypeSession+ ' indexes results')

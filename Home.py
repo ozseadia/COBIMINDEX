@@ -100,7 +100,6 @@ def PlotyCandlestick(Table2,Ind):
     #plot=px.bar(x=Table2.index,y=Table2[Ind])
     Topen=Ind+"1"
     Tclose=Ind+"2"
-    
     if Ind=='well':
         plot = go.Figure(data=[go.Candlestick(x=Table2.index,
                     open=Table2[Topen],
@@ -117,8 +116,9 @@ def PlotyCandlestick(Table2,Ind):
                     increasing_line_color= 'red', decreasing_line_color= 'green')])
         
     plot.update_layout(xaxis_rangeslider_visible=False)
+    f2 = go.FigureWidget(plot)
     #plot['layout']['xaxis']['autorange'] = "reversed"
-    return plot
+    return f2
 def Ploty(Table2,Ind):
     plot=px.bar(x=Table2.index,y=Table2[Ind])
     #plot['layout']['xaxis']['autorange'] = "reversed"
