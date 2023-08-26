@@ -174,7 +174,7 @@ if not(SW=='...'):
             st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.format(precision=0))
             #st.text(userID)
     else :
-        st.session_state['Patients']+=1
+        st.session_state['Patients']+=2
         if st.session_state['Patients']==1 :
             st.experimental_rerun()
             
