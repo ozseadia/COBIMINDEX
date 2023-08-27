@@ -78,17 +78,28 @@ def excelupdate1(Status,ind):
         ws.cell(row=ind, column=12).value=Status
         wb.save(filename)
         
-        
+def submit_text(message,ind):
+    if not(message==""):
+        wb = openpyxl.load_workbook(filename)
+        ws=wb['Sheet1']
+        Text=str(ws.cell(row=ind, column=13).value) +"|"
+        if not(str(ws.cell(row=ind, column=13).value)=='None'):
+            ws.cell(row=ind, column=13).value =Text+str(message)
+        else:
+            ws.cell(row=ind, column=13).value =str(message)
+        wb.save(filename)
+    #pass         
 
 
 
 def Refrash(ind,PP):
     Table_acounts=pd.read_excel(filename)
-    PP.dataframe(Table_acounts.iloc[ind,[0,2,3,4,5,6,7,8,9,10,11]])
+    PP.dataframe(Table_acounts.iloc[ind,[0,2,3,4,5,6,7,8,9,10,11,12]])
     
 
 def clear_text():
     st.session_state["text"]=""
+    st.session_state["text2"]=""
 
 #st.session_state["text"]=""
 De.render_svg(De.read_svg())
@@ -100,7 +111,7 @@ NAME=st.sidebar.selectbox('Select Patient', options,placeholder='select',on_chan
 
 if not(NAME=='.....'):
     ind=Table_acounts.index[Table_acounts['acount']==int(NAME)]
-    PP=st.dataframe(Table_acounts.iloc[ind,[0,2,3,4,5,6,7,8,9,10,11]])
+    PP=st.dataframe(Table_acounts.iloc[ind,[0,2,3,4,5,6,7,8,9,10,11,12]])
     col1, col2 ,col3 = st.columns(3)
     with col1:
         #clear_text()
@@ -140,6 +151,12 @@ if not(NAME=='.....'):
         if st.button('Submit status'):
             excelupdate1(Status,int(ind[0]+2))
             Refrash(ind,PP)
+    with col5:
+        Message=st.text_area("insert free text",value="",key='text2')
+        if st.button('Submit text'):
+            submit_text(Message,int(ind[0]+2))
+            Refrash(ind,PP)
+
             
 with open(filename, 'rb') as my_file:
     st.download_button(label = 'Download', data = my_file, file_name = 'acount and passwords.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')   
