@@ -15,6 +15,11 @@ import Home as De
 from PIL import Image
 
 global path_svg
+
+if 'text2' not in st.session_state:
+    st.session_state['text2'] = ""
+if 'text' not in st.session_state:
+    st.session_state['text'] = ""    
 #path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
 st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
