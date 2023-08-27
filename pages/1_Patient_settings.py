@@ -16,6 +16,8 @@ from PIL import Image
 
 global path_svg
 
+if 'text3' not in st.session_state:
+    st.session_state['text3'] = ""
 if 'text2' not in st.session_state:
     st.session_state['text2'] = ""
 if 'text' not in st.session_state:
@@ -42,6 +44,13 @@ S_options=['...',
            'Zohar Peled-Zinger',
            'Ganit Goren'
            ]
+
+def ConvertPatientId2Acount(PID,Table_acounts):
+    acount=Table_acounts['acount'][Table_acounts['Patient_ID']==PID]
+    if len(acount)>0:
+        return acount.iloc[0]
+    else:
+        return 'NaN'
 
 
 def excelupdate(PatientNumber,SW,Cordinator,ind,T1,T2,T3,T4,T5):
@@ -105,6 +114,7 @@ def Refrash(ind,PP):
 def clear_text():
     st.session_state["text"]=""
     st.session_state["text2"]=""
+    st.session_state["text3"]=""
 
 #st.session_state["text"]=""
 De.render_svg(De.read_svg())
@@ -112,8 +122,11 @@ st.title('Patient details settings')
 options=list(Table_acounts.acount)
 options.insert(0,'.....')
 
-NAME=st.sidebar.selectbox('Select Patient', options,placeholder='select',on_change=clear_text)
-
+NAME=st.sidebar.selectbox('APP ID', options,placeholder='select',on_change=clear_text)
+st.sidebar.subheader('Patient Id to APP Id converter:')
+PID=st.sidebar.text_input('Patient ID', key="text3")
+acount=ConvertPatientId2Acount(PID,Table_acounts)
+st.sidebar.write('APP ID:',acount)
 if not(NAME=='.....'):
     ind=Table_acounts.index[Table_acounts['acount']==int(NAME)]
     PP=st.dataframe(Table_acounts.iloc[ind,[0,2,3,4,5,6,7,8,9,10,11,12]])
