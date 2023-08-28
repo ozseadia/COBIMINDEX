@@ -150,6 +150,13 @@ def Level_Lag_in_days(V,userid,date):
     
     return(Level,weeks,Lags_in_days,Total_Lags)
     
+def Power(n1,n2):
+    D=n1-n2
+    if D<=0:
+        P=D*n2
+    else:
+        P=D*(10-n2)
+    return P
            
 
 def Index(V,userid,date,TypeSession,Patient):
@@ -186,10 +193,16 @@ def Index(V,userid,date,TypeSession,Patient):
         a=V['Session'].query('endSession >@D and endSession <= @D1 and userId == @userid and typeSession==@TypeSession')
         print(a)
         if len(a)>0:
-            sud1.append(a.iloc[0].sudsQ1) ;sud2.append(a.iloc[0].sudsQ2);sudPower.append(a.iloc[0].sudsQ2*(a.iloc[0].sudsQ1-a.iloc[0].sudsQ2))
-            vas1.append(a.iloc[0].vasQ1) ;vas2.append(a.iloc[0].vasQ2);vasPower.append(a.iloc[0].vasQ2*(a.iloc[0].vasQ1-a.iloc[0].vasQ2))
-            fat1.append(a.iloc[0].fatigueQ1) ;fat2.append(a.iloc[0].fatigueQ2);fatPower.append(a.iloc[0].fatigueQ2*(a.iloc[0].fatigueQ1-a.iloc[0].fatigueQ2))
-            well1.append(a.iloc[0].well_beingQ1) ;well2.append(a.iloc[0].well_beingQ2);wellPower.append(-a.iloc[0].well_beingQ2*(a.iloc[0].well_beingQ1-a.iloc[0].well_beingQ2))
+            #sud1.append(a.iloc[0].sudsQ1) ;sud2.append(a.iloc[0].sudsQ2);sudPower.append(a.iloc[0].sudsQ2*(a.iloc[0].sudsQ1-a.iloc[0].sudsQ2))
+            #vas1.append(a.iloc[0].vasQ1) ;vas2.append(a.iloc[0].vasQ2);vasPower.append(a.iloc[0].vasQ2*(a.iloc[0].vasQ1-a.iloc[0].vasQ2))
+            #fat1.append(a.iloc[0].fatigueQ1) ;fat2.append(a.iloc[0].fatigueQ2);fatPower.append(a.iloc[0].fatigueQ2*(a.iloc[0].fatigueQ1-a.iloc[0].fatigueQ2))
+            #well1.append(a.iloc[0].well_beingQ1) ;well2.append(a.iloc[0].well_beingQ2);wellPower.append(-a.iloc[0].well_beingQ2*(a.iloc[0].well_beingQ1-a.iloc[0].well_beingQ2))
+            
+            sud1.append(a.iloc[0].sudsQ1) ;sud2.append(a.iloc[0].sudsQ2);sudPower.append(Power(a.iloc[0].sudsQ1,a.iloc[0].sudsQ2))
+            vas1.append(a.iloc[0].vasQ1) ;vas2.append(a.iloc[0].vasQ2);vasPower.append(Power(a.iloc[0].vasQ1,a.iloc[0].vasQ2))
+            fat1.append(a.iloc[0].fatigueQ1) ;fat2.append(a.iloc[0].fatigueQ2);fatPower.append(Power(a.iloc[0].fatigueQ1,a.iloc[0].fatigueQ2))
+            well1.append(a.iloc[0].well_beingQ1) ;well2.append(a.iloc[0].well_beingQ2);wellPower.append(Power(10-a.iloc[0].well_beingQ1,10-a.iloc[0].well_beingQ2))
+            
             #Temp.update({str("%s%d" % ('befor_',j)):[a.iloc[0].sudsQ1],
             #      str("%s%d" % ('after_',j)):[a.iloc[0].sudsQ2],str("%s%d"%('poewr_',j)):[a.iloc[0].sudsQ1*(a.iloc[0].sudsQ1-a.iloc[0].sudsQ2)]})
         else:
