@@ -32,7 +32,7 @@ filename=os.path.join(dirname,'../Data/acount and passwords.xlsx')
 Table_acounts=pd.read_excel(filename)
 
 #SetUp 
-Cor_options=['...','Noa Shultz','Hila Askayo','Ganit Goren']
+Cor_options=['...','Noa Shultz','Hila Askayo','Ganit Goren','General']
 S_options=['...',
            'Naama Peled-Ironi',
            'Milca Hanukoglu',
@@ -42,7 +42,8 @@ S_options=['...',
            'Oneg Kabizon',
            'Shachar Michael',
            'Zohar Peled-Zinger',
-           'Ganit Goren'
+           'Ganit Goren',
+           'General'
            ]
 
 def ConvertPatientId2Acount(PID,Table_acounts):
