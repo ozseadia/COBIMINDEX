@@ -191,17 +191,17 @@ def Index(V,userid,date,TypeSession,Patient):
         D1=str(D1.date())
         Dateslist.append(D1)
         a=V['Session'].query('endSession >@D and endSession <= @D1 and userId == @userid and typeSession==@TypeSession')
-        print(a)
+        #print(a)
         if len(a)>0:
             #sud1.append(a.iloc[0].sudsQ1) ;sud2.append(a.iloc[0].sudsQ2);sudPower.append(a.iloc[0].sudsQ2*(a.iloc[0].sudsQ1-a.iloc[0].sudsQ2))
             #vas1.append(a.iloc[0].vasQ1) ;vas2.append(a.iloc[0].vasQ2);vasPower.append(a.iloc[0].vasQ2*(a.iloc[0].vasQ1-a.iloc[0].vasQ2))
             #fat1.append(a.iloc[0].fatigueQ1) ;fat2.append(a.iloc[0].fatigueQ2);fatPower.append(a.iloc[0].fatigueQ2*(a.iloc[0].fatigueQ1-a.iloc[0].fatigueQ2))
             #well1.append(a.iloc[0].well_beingQ1) ;well2.append(a.iloc[0].well_beingQ2);wellPower.append(-a.iloc[0].well_beingQ2*(a.iloc[0].well_beingQ1-a.iloc[0].well_beingQ2))
             
-            sud1.append(a.iloc[0].sudsQ1) ;sud2.append(a.iloc[0].sudsQ2);sudPower.append(Power(a.iloc[0].sudsQ1,a.iloc[0].sudsQ2))
-            vas1.append(a.iloc[0].vasQ1) ;vas2.append(a.iloc[0].vasQ2);vasPower.append(Power(a.iloc[0].vasQ1,a.iloc[0].vasQ2))
-            fat1.append(a.iloc[0].fatigueQ1) ;fat2.append(a.iloc[0].fatigueQ2);fatPower.append(Power(a.iloc[0].fatigueQ1,a.iloc[0].fatigueQ2))
-            well1.append(a.iloc[0].well_beingQ1) ;well2.append(a.iloc[0].well_beingQ2);wellPower.append(Power(10-a.iloc[0].well_beingQ1,10-a.iloc[0].well_beingQ2))
+            sud1.append(a.iloc[0].sudsQ1) ;sud2.append(a.iloc[-1].sudsQ2);sudPower.append(Power(a.iloc[0].sudsQ1,a.iloc[-1].sudsQ2))
+            vas1.append(a.iloc[0].vasQ1) ;vas2.append(a.iloc[-1].vasQ2);vasPower.append(Power(a.iloc[0].vasQ1,a.iloc[-1].vasQ2))
+            fat1.append(a.iloc[0].fatigueQ1) ;fat2.append(a.iloc[-1].fatigueQ2);fatPower.append(Power(a.iloc[0].fatigueQ1,a.iloc[-1].fatigueQ2))
+            well1.append(a.iloc[0].well_beingQ1) ;well2.append(a.iloc[-1].well_beingQ2);wellPower.append(Power(10-a.iloc[0].well_beingQ1,10-a.iloc[-1].well_beingQ2))
             
             #Temp.update({str("%s%d" % ('befor_',j)):[a.iloc[0].sudsQ1],
             #      str("%s%d" % ('after_',j)):[a.iloc[0].sudsQ2],str("%s%d"%('poewr_',j)):[a.iloc[0].sudsQ1*(a.iloc[0].sudsQ1-a.iloc[0].sudsQ2)]})
@@ -224,9 +224,11 @@ def ActiveUsers(V):
 def Table1(V,date,ActiveUsers_id,TypeSession,Patient):
     Table={}
     for user in ActiveUsers_id:
-        Temp=complience(V,user,date)
+        
         userName=str(V['App_user'].username[V['App_user'].id==user].values)[1:-1]
-        Table[userName]=Temp
+        Table[userName]=[userName]
+        Temp=complience(V,user,date)
+        for Z in Temp :Table[userName].append(Z)
         Temp=complience1(V,user,date)
         for Z in Temp :Table[userName].append(Z)
         Temp=Level_Lag_in_days(V,user,date)
@@ -239,7 +241,7 @@ def Table1(V,date,ActiveUsers_id,TypeSession,Patient):
         for Z in Temp['fat power'] :Table[userName].append(Z)
         for Z in Temp['well power'] :Table[userName].append(Z)
         
-    titles=['Compliance All[%]','Compliance 7 days [%]','Compliance 4 weeks [%]',
+    titles=['AppID','Compliance All[%]','Compliance 7 days [%]','Compliance 4 weeks [%]',
             '<1 practice a day [all]','<1 practice a day [7 days]','<1 practice a day [4 weeks]',
             'Level','weeks from start','Lag days in current Level','Total Lag days',
             'average practice time in minutes[all]','average practice time in minutes[7 days]','average practice time in minutes[4 weeks]',
@@ -258,12 +260,74 @@ def Convert_acount2id(V,userName):
 def userData(V,date,userName,TypeSession):
     userID=float(V['App_user'].id[V['App_user'].username==int(userName)].values)
     temp=Index(V,userID,date,TypeSession,userName)
-    
-    
-    
-    
-    
+
     return(temp)
+
+def UnImprove(table1,N):
+    for n in range(N,1,-1):
+        #print(n)
+        if sum((table1.well2[0:n]-table1.well1[0:n])<=0)+(table1.well2[0:n]-table1.well1[0:n]).isna().sum()>=n:
+            if sum((table1.sud1[0:n]-table1.sud2[0:n])<0)+(table1.sud1[0:n]-table1.sud2[0:n]).isna().sum()>=n:
+                return(True,n)
+            elif sum((table1.fat1[0:n]-table1.fat2[0:n])<0)+(table1.fat1[0:n]-table1.fat2[0:n]).isna().sum()>=n:
+                return(True,n)
+            elif sum((table1.vas1[0:n]-table1.vas2[0:n])<0)+(table1.vas1[0:n]-table1.vas2[0:n]).isna().sum()>=n:
+                return(True,n)
+            #else:
+            #    return(False,i)
+        #else:
+    return(False,n)
+
+def InLevelAdviseList(Level,tec):
+    #this function get level and table of practiced technics and returen the less practice action numbers
+    # at the current level in the last week 
+    n1=str(Level)
+    n2=str(Level+1)
+    a=Table_actions.query('`מספר סידורי` >= @n1 and `מספר סידורי` < @n2')
+    tecNumberMin=min(a.iloc[:,2])
+    tecNumberMax=max(a.iloc[:,2])
+    b=tec.query('`technic number`>=@tecNumberMin and `technic number`<=@tecNumberMax')
+    AdvicedTechNumber=b.iloc[b.iloc[:,3].idxmin(),0] # the less technic that was practice in the last week
+    # for last week is 3 , last 4 weeks is 4 and all time us 2
+    return(list(a.iloc[a.set_index(a.iloc[:,2]).index.get_loc(AdvicedTechNumber),0]))
+    
+def OutLevelAdviseList(Level,tec):
+    n1=str(Level)
+    n2=str(Level+1)
+    a=Table_actions.query('`מספר סידורי` <= @n1')
+    tecNumberMin=min(a.iloc[:,2])
+    tecNumberMax=max(a.iloc[:,2])
+    b=tec.query('`technic number`<=@tecNumberMax')
+    AdvicedTechNumber=b.iloc[b.iloc[:,3].idxmin(),0] # the less technic that was practice in the last week
+    return(list(a.iloc[a.set_index(a.iloc[:,2]).index.get_loc(AdvicedTechNumber),0]))
+    
+
+
+def advisor(userName,V,date,TypeSession):
+    userID=float(V['App_user'].id[V['App_user'].username==int(userName)].values)
+    a=V['PositionLevel'].query('userId==@userID')
+    Level=int(a.iloc[0].levelId)
+    TypeSession='Morning'
+    table1=userData(V,date,userName,TypeSession)
+    tec=technics(V,userName,date)
+    Yes,n=UnImprove(table1,13)
+    print(n)
+    if Yes and n==13:
+        return(OutLevelAdviseList(Level,tec))
+        
+        #tec=DB.technics(V,'222',date)
+    elif  Yes and n<13 and n>=7:
+        return(InLevelAdviseList(Level,tec))
+    elif  Yes and n<7 and n>3:
+        return(OutLevelAdviseList(Level,tec))
+    elif  n<=3:
+        return(InLevelAdviseList(Level,tec))
+    
+    
+        pass
+        
+    
+    
 
     
 def start():

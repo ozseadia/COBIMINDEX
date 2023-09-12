@@ -110,11 +110,11 @@ def PlotyCandlestick(Table2,Ind):
     return plot
     
 def ComplinesTable(TABLE):
-    ind=list(range(0,13))
+    ind=list(range(0,14))
     return(TABLE.iloc[ind])
 
 def IndexTable(TABLE):
-    ind=list(range(13,len(TABLE)))
+    ind=list(range(14,len(TABLE)))
     return(TABLE.iloc[ind])
 def Extract_Patien_List():
     a=Table_acounts.query('Therapist==@SW or Coordinator==@SW')
