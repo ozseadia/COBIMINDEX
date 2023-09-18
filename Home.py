@@ -129,11 +129,11 @@ def PlotyMulty(Table2):
     return(plot)
     
 def ComplinesTable(TABLE):
-    ind=list(range(0,13))
+    ind=list(range(0,14))
     return(TABLE.iloc[ind])
 
 def IndexTable(TABLE):
-    ind=list(range(13,len(TABLE)))
+    ind=list(range(14,len(TABLE)))
     return(TABLE.iloc[ind])
 
 @st.cache_data
