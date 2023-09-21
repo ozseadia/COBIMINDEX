@@ -145,6 +145,19 @@ def load_data(temp):
     V,date,userid,ActiveUsers_id=DB.start()
     return (V,date,userid,ActiveUsers_id)
     
+def DataDownload():
+    import os
+    import shutil
+    import webbrowser
+    import time
+
+    #url = 'http://ec2-3-123-19-109.eu-central-1.compute.amazonaws.com:8080/api/v1/export_data/excel'
+
+    url='http://ec2-3-69-87-195.eu-central-1.compute.amazonaws.com:8080/api/v1/export_data/excel'
+    webbrowser.open_new(url)
+    time.sleep(5)
+    #shutil.move(r'C:\Users\OzSea.LAPTOP-LLBIIFTU\Downloads\data.xlsx', r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\COBIMINDEX\Data\data.xlsx')
+
     
 #st.image(image,width=100) 
 #st.markdown("<br>", unsafe_allow_html=True)
@@ -213,3 +226,6 @@ if not (NAME==options[0]):
         st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.format(precision=0))
         #st.text(userID)
         
+if st.sidebar.button('Download Data'):
+    DataDownload()
+    
