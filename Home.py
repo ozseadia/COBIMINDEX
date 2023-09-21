@@ -154,8 +154,17 @@ def DataDownload():
     #url = 'http://ec2-3-123-19-109.eu-central-1.compute.amazonaws.com:8080/api/v1/export_data/excel'
 
     url='http://ec2-3-69-87-195.eu-central-1.compute.amazonaws.com:8080/api/v1/export_data/excel'
-    webbrowser.open_new(url)
-    time.sleep(10)
+    #webbrowser.open_new(url)
+    #time.sleep(10)
+    
+    button_code = f'''
+            <p>
+                <a href={url} class="btn btn-outline-primary btn-lg btn-block" type="button" aria-pressed="true">
+                Download Data 
+                </a>
+            </p>'''
+    
+    return st.sidebar.markdown(button_code, unsafe_allow_html=True)
     #shutil.move(r'C:\Users\OzSea.LAPTOP-LLBIIFTU\Downloads\data.xlsx', r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\COBIMINDEX\Data\data.xlsx')
 
     
@@ -226,6 +235,6 @@ if not (NAME==options[0]):
         st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.format(precision=0))
         #st.text(userID)
         
-if st.sidebar.button('Download Data'):
-    DataDownload()
+#if st.sidebar.button('Download Data'):
+DataDownload()
     
