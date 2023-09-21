@@ -4,4 +4,4 @@ pandas
 numpy
 plotly
 ipywidgets
-webbrowser
+web-browser
