@@ -155,7 +155,7 @@ def DataDownload():
 
     url='http://ec2-3-69-87-195.eu-central-1.compute.amazonaws.com:8080/api/v1/export_data/excel'
     webbrowser.open_new(url)
-    time.sleep(5)
+    time.sleep(10)
     #shutil.move(r'C:\Users\OzSea.LAPTOP-LLBIIFTU\Downloads\data.xlsx', r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\COBIMINDEX\Data\data.xlsx')
 
     
