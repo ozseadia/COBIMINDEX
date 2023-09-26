@@ -189,7 +189,7 @@ def Index(V,userid,date,TypeSession,Patient):
         D=D1-timedelta(days=1)
         D=str(D.date())
         D1=str(D1.date())
-        Dateslist.append(D1)
+        Dateslist.append(D)
         a=V['Session'].query('endSession >@D and endSession <= @D1 and userId == @userid and typeSession==@TypeSession')
         #print(a)
         if len(a)>0:
