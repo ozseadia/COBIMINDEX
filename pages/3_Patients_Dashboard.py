@@ -18,6 +18,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import Home as De
 
+if 'LogIn_Aprove' not in st.session_state:
+    st.session_state['LogIn_Aprove'] = []
 
 if 'Patients' not in st.session_state:
     st.session_state['Patients'] = 1
@@ -39,6 +41,7 @@ def EnableAll():
     st.session_state['Patients']=1
 
 SW=st.sidebar.selectbox('Assigned Coordinator/Therapist',S_options,on_change=EnableAll())
+#SW=st.sidebar.selectbox('Assigned Coordinator/Therapist',[str(st.session_state['LogIn_Aprove'][0][0])],on_change=EnableAll())
 #SW=st.sidebar.selectbox('Assigned Coordinator/Therapist',S_options)
 #time.sleep(1)
 #EnableAll(SW)
@@ -131,7 +134,7 @@ def ConvertPatienID2Acount(PatienID,PatientList):
    
     
 st.title('Dash Board')
-V,date,userid,ActiveUsers_id=DB.start()
+T,V,date,userid,ActiveUsers_id=DB.start()
 if not(SW=='...'):
     PatientList=Extract_Patien_ListAppId()
     #PatientList=Extract_Patien_List()

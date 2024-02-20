@@ -18,9 +18,11 @@ global Lexicon
 rootPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\הערות פיתוח פנימי\data'
 #DataPath=r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\Data\data.xlsx'
 DataPath=os.path.join(dirname, 'Data/data.xlsx')
-Table_actions=pd.read_excel(os.path.join(dirname,'Data/checkWork - 25.06.23.xlsx'),sheet_name='actions')
-Table_tech=pd.read_excel(os.path.join(dirname,'Data/checkWork - 25.06.23.xlsx'),sheet_name='techniques')
-Table_Level=pd.read_excel(os.path.join(dirname,'Data/checkWork - 25.06.23.xlsx'),sheet_name='levels')
+checkWork='checkWork -30.12.23.xlsx'
+checkWorkPath=os.path.join(dirname, 'Data',checkWork)
+Table_actions=pd.read_excel(os.path.join(dirname,'Data',checkWork),sheet_name='actions')
+Table_tech=pd.read_excel(os.path.join(dirname,'Data',checkWork),sheet_name='techniques')
+Table_Level=pd.read_excel(os.path.join(dirname,'Data',checkWork),sheet_name='levels')
 
 #CSVFiles=os.listdir(rootPath)
 
@@ -217,6 +219,156 @@ def Index(V,userid,date,TypeSession,Patient):
                          'fat1':fat1,'fat2': fat2,'fat power': fatPower,
                          'well1':well1,'well2': well2,'well power': wellPower},index=Dateslist)
     return(table1)
+
+def Extract_Exercise_information(T,V,Session_Id):
+    Total_time=0
+    Actions_list=str()
+    #Session_Id=1328
+    Exercise_list=list(V['list_exercises_ids'].query('sessionId==@Session_Id')['list_exercises_ids'])
+    for i in Exercise_list:
+        if V['Exercise'].query('exerciseId==@i')['dateEnd'].iloc[0] ==V['Exercise'].query('exerciseId==@i')['dateEnd'].iloc[0]:
+            # List of Action
+            Action_id=(int((V['Exercise'].query('exerciseId==@i')['actionId']).iloc[0]))
+            Action_Name=T['actions'].query('Action_Number == @Action_id')['Action_Name'].iloc[0]
+            #Actions_list.append(str(Action_id)+'-'+Action_Name)
+            Actions_list+=str(Action_id)+'-'+Action_Name+'\n'
+            
+            #total time calculation
+            Endtime=datetime.strptime((V['Exercise'].query('exerciseId==@i')['dateEnd']).iloc[0],"%Y-%m-%d %H:%M:%S")
+            Starttime=datetime.strptime((V['Exercise'].query('exerciseId==@i')['dateStart']).iloc[0],"%Y-%m-%d %H:%M:%S")
+            Total_time+=(Endtime-Starttime).seconds//60
+    return(Actions_list,Total_time)    
+    
+
+def Patient_Records(T,V,Patient):
+    userid=float(V['App_user'].id[V['App_user'].username==int(Patient)].values)
+    # sud1=list();sud2=list();sudPower=list()
+    # vas1=list();vas2=list();vasPower=list()
+    # fat1=list();fat2=list();fatPower=list()
+    # well1=list();well2=list();wellPower=list()
+    # Dateslist=list()
+    table=dict()
+    #Temp={}
+    GroupType=''
+    Level=''
+    if Patient=='.....' :
+        N=8
+    else:
+        #try:
+            t=V['Session'].query('userId == @userid')
+            Level=V['PositionLevel'].query('userId == @userid')['levelId'].iloc[0]
+            if V['App_user'].query('id == @userid')['groupType'].iloc[0]=='C':
+                GroupType='Control'
+            elif V['App_user'].query('id == @userid')['groupType'].iloc[0]=='E':
+                GroupType='Experimental'
+        #     N=(datetime.strptime(date[0],"%Y-%m-%d")-datetime.strptime(t.iloc[0].startSession,"%Y-%m-%d %H:%M:%S")).days+3
+        #     if N<=1:
+        #         N=2
+        # #except:
+        #     N=2
+    table=dict()        
+    tableE=dict()
+    tableM=dict()        
+    Today=datetime.now().date
+    Ne_practic=0
+    Nm_practic=0
+    Actions_list={'Evening':str(),'Morning':str()}   # Evening , Morning
+    Total_time={'Evening':0,'Morning':0}
+    SudE=list() ; SudM=list();vasE=list() ; vasM=list();fatE=list() ; fatM=list();wellE=list() ; wellM=list();
+    j=-1;        
+    while j <len(t)-1:
+        j+=1
+        N=(Today()-(datetime.strptime(t.iloc[j].startSession,"%Y-%m-%d %H:%M:%S")).date()).days
+        
+        if N==0:
+            # appdate suds list
+            if t['typeSession'].iloc[j]=='Evening':
+                Ne_practic+=1
+                SudE.append([t['sudsQ1'].iloc[j],t['sudsQ2'].iloc[j]])
+                vasE.append([t['vasQ1'].iloc[j],t['vasQ2'].iloc[j]])
+                fatE.append([t['fatigueQ1'].iloc[j],t['fatigueQ2'].iloc[j]])
+                wellE.append([t['well_beingQ1'].iloc[j],t['well_beingQ2'].iloc[j]])
+                Session_Id=int(t['sessionId'].iloc[j])
+                AL,Tt=Extract_Exercise_information(T,V,Session_Id)
+                if Tt!=0:
+                    Actions_list['Evening']+=AL
+                    Total_time['Evening']+=Tt
+            else:
+                Nm_practic+=1
+                SudM.append([t['sudsQ1'].iloc[j],t['sudsQ2'].iloc[j]])
+                vasM.append([t['vasQ1'].iloc[j],t['vasQ2'].iloc[j]])
+                fatM.append([t['fatigueQ1'].iloc[j],t['fatigueQ2'].iloc[j]])
+                wellM.append([t['well_beingQ1'].iloc[j],t['well_beingQ2'].iloc[j]])
+                Session_Id=int(t['sessionId'].iloc[j])
+                AL,Tt=Extract_Exercise_information(T,V,Session_Id)
+                if Tt!=0:
+                    Actions_list['Morning']+=AL
+                    Total_time['Morning']+=Tt
+            #print((datetime.strptime(t.iloc[j].startSession,"%Y-%m-%d %H:%M:%S")).date())
+            #print(j)
+        else:
+            if Ne_practic:
+                table[str(Today())+' E']={'Action list':Actions_list['Evening'],
+                                          'Total time':Total_time['Evening'],'Number Of Sessions':Ne_practic,
+                                          'SUDS':SudE,'Pain':vasE,'Fatigue':fatE,'Well-being':wellE
+                                      }
+                tableE[str(Today())]={'SUDS':SudE,'Pain':vasE,'Fatigue':fatE,'Well-being':wellE,
+                                      'Action list':Actions_list['Evening'],'Total time':Total_time['Evening'],
+                                      'Number Of Sessions':Ne_practic}
+            if Nm_practic:
+                table[str(Today())+' M']={'Action list':Actions_list['Morning'],
+                                          'Total time':Total_time['Morning'],'Number Of Sessions':Nm_practic,
+                                          'SUDS':SudM,'Pain':vasM,'Fatigue':fatM,'Well-being':wellM
+                                          }
+                                      
+                tableM[str(Today())]={'SUDS':SudM,'Pain':vasM,'Fatigue':fatM,'Well-being':wellM,
+                                      'Action list':Actions_list['Morning'],'Total time':Total_time['Morning'],
+                                      'Number Of Sessions':Nm_practic}
+            Today=(datetime.strptime(t.iloc[j].startSession,"%Y-%m-%d %H:%M:%S")).date
+            j-=1
+            Ne_practic=0
+            Nm_practic=0
+            SudE=list() ; SudM=list();vasE=list() ; vasM=list();fatE=list() ; fatM=list();wellE=list() ; wellM=list();
+            Actions_list={'Evening':str(),'Morning':str()}   # Evening , Morning
+            Total_time={'Evening':0,'Morning':0}       
+            
+            
+    # #D=datetime.strptime(date[0], "%Y-%m-%d")
+    # #D=str(D.date())        
+    # #Dateslist.append(D)        
+    # for j in range(1,N):
+    #     #D=datetime.strptime(date[0], "%Y-%m-%d")-timedelta(days=j)
+    #     #D=str(D.date())
+    #     D1=datetime.strptime(date[0], "%Y-%m-%d")-timedelta(days=j-1)
+    #     D=D1-timedelta(days=1)
+    #     D=str(D.date())
+    #     D1=str(D1.date())
+    #     Dateslist.append(D)
+    #     a=V['Session'].query('endSession >@D and endSession <= @D1 and userId == @userid and typeSession==@TypeSession')
+    #     #print(a)
+    #     if len(a)>0:
+    #         #sud1.append(a.iloc[0].sudsQ1) ;sud2.append(a.iloc[0].sudsQ2);sudPower.append(a.iloc[0].sudsQ2*(a.iloc[0].sudsQ1-a.iloc[0].sudsQ2))
+    #         #vas1.append(a.iloc[0].vasQ1) ;vas2.append(a.iloc[0].vasQ2);vasPower.append(a.iloc[0].vasQ2*(a.iloc[0].vasQ1-a.iloc[0].vasQ2))
+    #         #fat1.append(a.iloc[0].fatigueQ1) ;fat2.append(a.iloc[0].fatigueQ2);fatPower.append(a.iloc[0].fatigueQ2*(a.iloc[0].fatigueQ1-a.iloc[0].fatigueQ2))
+    #         #well1.append(a.iloc[0].well_beingQ1) ;well2.append(a.iloc[0].well_beingQ2);wellPower.append(-a.iloc[0].well_beingQ2*(a.iloc[0].well_beingQ1-a.iloc[0].well_beingQ2))
+            
+    #         sud1.append(a.iloc[0].sudsQ1) ;sud2.append(a.iloc[-1].sudsQ2);sudPower.append(Power(a.iloc[0].sudsQ1,a.iloc[-1].sudsQ2))
+    #         vas1.append(a.iloc[0].vasQ1) ;vas2.append(a.iloc[-1].vasQ2);vasPower.append(Power(a.iloc[0].vasQ1,a.iloc[-1].vasQ2))
+    #         fat1.append(a.iloc[0].fatigueQ1) ;fat2.append(a.iloc[-1].fatigueQ2);fatPower.append(Power(a.iloc[0].fatigueQ1,a.iloc[-1].fatigueQ2))
+    #         well1.append(a.iloc[0].well_beingQ1) ;well2.append(a.iloc[-1].well_beingQ2);wellPower.append(Power(10-a.iloc[0].well_beingQ1,10-a.iloc[-1].well_beingQ2))
+            
+    #         #Temp.update({str("%s%d" % ('befor_',j)):[a.iloc[0].sudsQ1],
+    #         #      str("%s%d" % ('after_',j)):[a.iloc[0].sudsQ2],str("%s%d"%('poewr_',j)):[a.iloc[0].sudsQ1*(a.iloc[0].sudsQ1-a.iloc[0].sudsQ2)]})
+    #     else:
+    #         sud1.append(np.nan);sud2.append(np.nan);sudPower.append(np.nan)
+    #         vas1.append(np.nan);vas2.append(np.nan);vasPower.append(np.nan)
+    #         fat1.append(np.nan);fat2.append(np.nan);fatPower.append(np.nan)
+    #         well1.append(np.nan);well2.append(np.nan);wellPower.append(np.nan)
+    #         #Temp.update({str("%s%d" % ('befor_',j)):[np.nan],
+    #         #      str("%s%d" % ('after_',j)):[np.nan],str("%s%d"%('poewr_',j)):[np.nan]})
+    
+    return (pd.DataFrame.from_dict(table,orient='index'),Level,GroupType)
+
         
 def ActiveUsers(V):
     
@@ -343,13 +495,21 @@ def start():
     date=[str(datetime.now().date()),str(datetime.now().date()-timedelta(days=7)),
           str(datetime.now().date()-timedelta(days=28))]
 
-    xls.close()    
-    #date=[str(datetime.now().date()),"2023-07-08","2023-07-15"]
-    userid=11
+    xls.close()   
     
-    complience(V,userid,date)
-    complience1(V,userid,date)
+    T={}
+    xls = pd.ExcelFile(checkWorkPath)
+    for sheet_name in xls.sheet_names:
+        T[sheet_name]= xls.parse(sheet_name)
+    xls.close()
+    T['actions'].rename(columns = {T["actions"].keys()[0]:'Action_Number'}, inplace = True)
+    T['actions'].rename(columns = {T["actions"].keys()[1]:'Action_Name'}, inplace = True)  
+    #date=[str(datetime.now().date()),"2023-07-08","2023-07-15"]
+    userid=175
+    
+    #complience(V,userid,date)
+    #complience1(V,userid,date)
     #V['session'].query('end_session > @date[0] and end_session < @date[1] and user_id == @userid')
     
     #tech=technics(V,userid,date)
-    return(V,date,userid,ActiveUsers_id)
+    return(T,V,date,userid,ActiveUsers_id)
