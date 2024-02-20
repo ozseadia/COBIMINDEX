@@ -186,7 +186,7 @@ if not(SW=='...'):
             st.dataframe(Ti.style.applymap(highlight_cols,
                                             ).format(precision=0))
     
-    
+
     options=list(PatientList['Patient_ID'])
     options.insert(0,'.....')
     PatientID=st.sidebar.selectbox('Select Patient', options)
@@ -197,7 +197,7 @@ if not(SW=='...'):
         with placeholder1.container():
             Table3,Level,GroupType=DB.Patient_Records(T,V,NAME)
             st.title(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ PatientID + ' indexes results')
-            st.dataframe(Table3.style.apply(apply_formatting))
+            st.dataframe(Table3.iloc[::-1].style.apply(apply_formatting))
             col1,col2 = st.columns([1,3])
             with col1:
                 TypeSession=st.selectbox('Please Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
