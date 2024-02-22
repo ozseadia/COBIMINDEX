@@ -24,6 +24,7 @@ Table_actions=pd.read_excel(os.path.join(dirname,'Data',checkWork),sheet_name='a
 Table_tech=pd.read_excel(os.path.join(dirname,'Data',checkWork),sheet_name='techniques')
 Table_Level=pd.read_excel(os.path.join(dirname,'Data',checkWork),sheet_name='levels')
 
+
 #CSVFiles=os.listdir(rootPath)
 
 
@@ -488,7 +489,8 @@ def start():
     # for filename in CSVFiles:    
     #    V[filename[:-4]]=ReadCSV(rootPath,filename)
     V={}
-    xls = pd.ExcelFile(DataPath)
+    #xls = pd.ExcelFile(DataPath)
+    xls = pd.ExcelFile('http://ec2-3-69-87-195.eu-central-1.compute.amazonaws.com:8080/api/v1/export_data/excel')
     for sheet_name in xls.sheet_names:
         V[sheet_name]= xls.parse(sheet_name)
     ActiveUsers_id=list(set(V['ActionFinish'].userId))

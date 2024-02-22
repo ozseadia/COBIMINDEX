@@ -25,7 +25,6 @@ path_svg = os.path.join(dirname, 'pages/SVG/OpenScreenLogo.svg')
 #path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
 #image = Image.open(SVG_path)
 st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
-
 def read_svg(path_svg=os.path.join(dirname, 'pages/SVG/OpenScreenLogo.svg')):
     """Get a SVG file as HTML
 
