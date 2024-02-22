@@ -197,6 +197,8 @@ if not(SW=='...'):
         with placeholder1.container():
             Table3,Level,GroupType=DB.Patient_Records(T,V,NAME)
             st.title(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ PatientID + ' indexes results')
+            st.subheader('Level :'+str(int(Level)))
+            st.subheader('Group Type: '+ GroupType)
             st.dataframe(Table3.iloc[::-1].style.apply(apply_formatting))
             col1,col2 = st.columns([1,3])
             with col1:
