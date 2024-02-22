@@ -291,9 +291,9 @@ def Patient_Records(T,V,Patient):
                 wellE.append([t['well_beingQ1'].iloc[j],t['well_beingQ2'].iloc[j]])
                 Session_Id=int(t['sessionId'].iloc[j])
                 AL,Tt=Extract_Exercise_information(T,V,Session_Id)
-                if Tt!=0:
-                    Actions_list['Evening']+=AL
-                    Total_time['Evening']+=Tt
+                #if Tt!=0:
+                Actions_list['Evening']+=AL
+                Total_time['Evening']+=Tt
             else:
                 Nm_practic+=1
                 SudM.append([t['sudsQ1'].iloc[j],t['sudsQ2'].iloc[j]])
@@ -302,9 +302,9 @@ def Patient_Records(T,V,Patient):
                 wellM.append([t['well_beingQ1'].iloc[j],t['well_beingQ2'].iloc[j]])
                 Session_Id=int(t['sessionId'].iloc[j])
                 AL,Tt=Extract_Exercise_information(T,V,Session_Id)
-                if Tt!=0:
-                    Actions_list['Morning']+=AL
-                    Total_time['Morning']+=Tt
+                #if Tt!=0:
+                Actions_list['Morning']+=AL
+                Total_time['Morning']+=Tt
             #print((datetime.strptime(t.iloc[j].startSession,"%Y-%m-%d %H:%M:%S")).date())
             #print(j)
         else:
