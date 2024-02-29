@@ -18,12 +18,14 @@ import plotly.express as px
 import plotly.graph_objects as go
 import Home as De
 
+#st.set_page_config(page_title="Patients Dashboard", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 if 'LogIn_Aprove' not in st.session_state:
     st.session_state['LogIn_Aprove'] = []
 
 if 'Patients' not in st.session_state:
     st.session_state['Patients'] = 1
-st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+#st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+
 #path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
 De.render_svg(De.read_svg())
 S_options=['...',
@@ -153,17 +155,29 @@ def ReplaceKeys(T,PatientList):
     return(T)
 def ConvertPatienID2Acount(PatienID,PatientList):
     return(PatientList['acount'][PatientList['Patient_ID']==PatientID].iloc[0])
-   
+
+@st.cache_data(ttl=3600)
+def load_data(temp):
+    
+    T,V,date,userid,ActiveUsers_id=DB.start()
+    return (T,V,date,userid,ActiveUsers_id)    
+
+@st.cache_data(ttl=3600)
+def Table1(V,date,ActiveUsers_id,TypeSession='Morning',):
+    TABLE=DB.Table1(V,date,ActiveUsers_id,'Morning','.....')
+    return (TABLE)
     
 st.title('Dash Board')
-T,V,date,userid,ActiveUsers_id=DB.start()
+#T,V,date,userid,ActiveUsers_id=DB.start()
+T,V,date,userid,ActiveUsers_id=load_data(temp=1)
 if not(SW=='...'):
     PatientList=Extract_Patien_ListAppId()
     #PatientList=Extract_Patien_List()
     ids_List=[]
     for temp in PatientList['acount']:
         ids_List.append(DB.Convert_acount2id(V,temp))
-    TABLE=DB.Table1(V,date,ids_List,'Morning','.....')
+    #TABLE=DB.Table1(V,date,ids_List,'Morning','.....')
+    TABLE=Table1(V,date,ids_List,'Morning')
     
 #TABLE.style.apply(highlight_max, color='red')
     placeholder1 = st.empty()
@@ -180,7 +194,8 @@ if not(SW=='...'):
             col1,col2 = st.columns([1,3])
             with col1:
                 TypeSession=st.selectbox('Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
-            TABLE=DB.Table1(V,date,ids_List,TypeSession,'.....')
+            #TABLE=DB.Table1(V,date,ids_List,TypeSession,'.....')
+            TABLE=Table1(V,date,ids_List,TypeSession)
             Ti=IndexTable(TABLE)
             Ti=ReplaceKeys(Ti,PatientList)
             st.dataframe(Ti.style.applymap(highlight_cols,
@@ -232,9 +247,9 @@ if not(SW=='...'):
             #st.bar_chart(pd.DataFrame(chart_data))
             #userID=str(V['App_user'].id[V['App_user'].username==int(NAME)].values)[1:-1]
             st.title(':clipboard: Patient '+PatientID +' exercises table ')
-            Table3=DB.technics(V,NAME,date)
+            Table4=DB.technics(V,NAME,date)
             #df1=Table3.iloc[:, 2:4]
-            st.dataframe(Table3.iloc[:,0:5].set_index('technic number').style.format(precision=0))
+            st.dataframe(Table4.iloc[:,0:5].set_index('technic number').style.format(precision=0))
             #st.text(userID)
     else :
         st.session_state['Patients']+=1

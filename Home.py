@@ -141,6 +141,7 @@ def Start():
     return (st.session_state['Start'])
 @st.cache_data(ttl=3600)
 def load_data(temp):
+    
     T,V,date,userid,ActiveUsers_id=DB.start()
     return (T,V,date,userid,ActiveUsers_id)
     
@@ -165,16 +166,20 @@ def DataDownload():
     
     return st.sidebar.markdown(button_code, unsafe_allow_html=True)
     #shutil.move(r'C:\Users\OzSea.LAPTOP-LLBIIFTU\Downloads\data.xlsx', r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\COBIMINDEX\Data\data.xlsx')
-
+@st.cache_data(ttl=3600)
+def Table1(V,date,ActiveUsers_id,TypeSession='Morning',):
+    TABLE=DB.Table1(V,date,ActiveUsers_id,'Morning','.....')
+    return (TABLE)
     
 #st.image(image,width=100) 
 #st.markdown("<br>", unsafe_allow_html=True)
 #render_svg(read_svg(r"src/undraw_Decide_re_ixfw.svg"))
 render_svg(read_svg())
 st.title('Dash Board')
-T,V,date,userid,ActiveUsers_id=load_data(temp=Start())
+#T,V,date,userid,ActiveUsers_id=load_data(temp=Start())
+T,V,date,userid,ActiveUsers_id=load_data(temp=1)
 #V,date,userid,ActiveUsers_id=DB.start()
-TABLE=DB.Table1(V,date,ActiveUsers_id,'Morning','.....')
+TABLE=Table1(V,date,ActiveUsers_id)
 #TABLE.style.apply(highlight_max, color='red')
 placeholder1 = st.empty()
 with placeholder1.container():
@@ -187,7 +192,8 @@ with placeholder1.container():
     col1,col2 = st.columns([1,3])
     with col1:
         TypeSession=st.selectbox('Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
-    TABLE=DB.Table1(V,date,ActiveUsers_id,TypeSession,'.....')
+    #TABLE=DB.Table1(V,date,ActiveUsers_id,TypeSession,'.....')
+    TABLE=Table1(V,date,ActiveUsers_id,TypeSession)
     Ti=IndexTable(TABLE)
     #Ti.set_precision(0)
     st.dataframe(Ti.style.applymap(highlight_cols,
