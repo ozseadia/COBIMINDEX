@@ -38,6 +38,7 @@ S_options=['...',
            'Shachar Michael',
            'Zohar Peled-Zinger',
            'Noa Shultz','Hila Askayo','Ganit Goren','General']
+
 @st.cache_data()
 def EnableAll():
     st.session_state['Patients']=1
