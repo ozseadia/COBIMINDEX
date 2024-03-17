@@ -116,6 +116,7 @@ def PlotyCandlestick(Table2,Ind):
         
     plot.update_layout(xaxis_rangeslider_visible=False)
     f2 = go.FigureWidget(plot)
+    f2.update_yaxes(range=[0, 10]) 
     #plot['layout']['xaxis']['autorange'] = "reversed"
     return f2
 def Ploty(Table2,Ind):
