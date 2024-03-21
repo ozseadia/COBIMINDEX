@@ -125,10 +125,15 @@ def technics(V,userName,date):
             a=V['ActionFinish'].query('dateFinish <= @date[0] and dateFinish >= @date[@i] and userId == @userid')
         '''
         #temp=a.action_id.value_counts() 
-        for k in range(len(tech)):
-            b=Table_actions[Table_actions.keys()[2]]==k+1
+        # for k in range(len(tech)):
+        #     b=Table_actions[Table_actions.keys()[2]]==k+1
+        #     A1=(Table_actions[Table_actions.keys()[0]][b]).values
+        #     tech[tech.keys()[i+2]][k]=sum(a['actionId'].isin(A1))
+            
+        for k in tech[tech.keys()[0]]:
+            b=Table_actions[Table_actions.keys()[2]]==k
             A1=(Table_actions[Table_actions.keys()[0]][b]).values
-            tech[tech.keys()[i+2]][k]=sum(a['actionId'].isin(A1))
+            tech[tech.keys()[i+2]][tech[tech[tech.keys()[0]]==k].index]=sum(a['actionId'].isin(A1))
     return(tech)
 
 def Level_Lag_in_days(V,userid,date):
@@ -333,7 +338,23 @@ def Patient_Records(T,V,Patient):
             Actions_list={'Evening':str(),'Morning':str()}   # Evening , Morning
             Total_time={'Evening':0,'Morning':0}       
             
-            
+    if Ne_practic:
+        table[str(Today())+' E']={'Action list':Actions_list['Evening'],
+                                  'Total time':Total_time['Evening'],'Number Of Sessions':Ne_practic,
+                                  'SUDS':SudE,'Pain':vasE,'Fatigue':fatE,'Well-being':wellE
+                              }
+        tableE[str(Today())]={'SUDS':SudE,'Pain':vasE,'Fatigue':fatE,'Well-being':wellE,
+                              'Action list':Actions_list['Evening'],'Total time':Total_time['Evening'],
+                              'Number Of Sessions':Ne_practic}
+    if Nm_practic:
+        table[str(Today())+' M']={'Action list':Actions_list['Morning'],
+                                  'Total time':Total_time['Morning'],'Number Of Sessions':Nm_practic,
+                                  'SUDS':SudM,'Pain':vasM,'Fatigue':fatM,'Well-being':wellM
+                                  }
+                              
+        tableM[str(Today())]={'SUDS':SudM,'Pain':vasM,'Fatigue':fatM,'Well-being':wellM,
+                              'Action list':Actions_list['Morning'],'Total time':Total_time['Morning'],
+                              'Number Of Sessions':Nm_practic}      
     # #D=datetime.strptime(date[0], "%Y-%m-%d")
     # #D=str(D.date())        
     # #Dateslist.append(D)        
