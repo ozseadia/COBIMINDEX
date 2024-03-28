@@ -157,6 +157,17 @@ def Level_Lag_in_days(V,userid,date):
          weeks=np.nan
     
     return(Level,weeks,Lags_in_days,Total_Lags)
+
+def weeks_from_Start(V,Patient,date):
+    userid=float(V['App_user'].id[V['App_user'].username==int(Patient)].values)
+    t=V['Session'].query('userId == @userid')
+    if len(t)>0:
+        N=(datetime.strptime(date[0],"%Y-%m-%d")-datetime.strptime(t.iloc[0].startSession,"%Y-%m-%d %H:%M:%S")).days
+        weeks=int(N/7)
+    else:
+        weeks=np.nan
+    return weeks
+    
     
 def Power(n1,n2):
     D=n1-n2

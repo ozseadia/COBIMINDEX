@@ -254,7 +254,13 @@ if not(SW=='...'):
             # if st.button('Submit text'):
             #     submit_text(Message,int(ind[0]+2))
             #     Refrash(ind,PP)
-                
+            st.title(':clipboard: Patient '+PatientID +' Exercised techniques')
+            weeks=DB.weeks_from_Start(V,NAME,date)
+            #st.subheader(str(int(Tc[PatientID].iloc[9]))+' Weeks from start')
+            st.subheader(str(weeks)+' Weeks from start')
+            Table4=DB.technics(V,NAME,date)
+            #df1=Table3.iloc[:, 2:4]
+            st.dataframe(Table4.iloc[:,0:5].set_index('technic number').style.format(precision=0))    
             col1,col2 = st.columns([1,3])
             with col1:
                 TypeSession=st.selectbox('Please Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
@@ -286,10 +292,7 @@ if not(SW=='...'):
     
             #st.bar_chart(pd.DataFrame(chart_data))
             #userID=str(V['App_user'].id[V['App_user'].username==int(NAME)].values)[1:-1]
-            st.title(':clipboard: Patient '+PatientID +' exercises table ')
-            Table4=DB.technics(V,NAME,date)
-            #df1=Table3.iloc[:, 2:4]
-            st.dataframe(Table4.iloc[:,0:5].set_index('technic number').style.format(precision=0))
+            
             #st.text(userID)
     else :
         st.session_state['Patients']+=1
