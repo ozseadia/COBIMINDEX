@@ -258,6 +258,7 @@ if not(SW=='...'):
             weeks=DB.weeks_from_Start(V,NAME,date)
             #st.subheader(str(int(Tc[PatientID].iloc[9]))+' Weeks from start')
             st.subheader(str(weeks)+' Weeks from start')
+            
             Table4=DB.technics(V,NAME,date)
             #df1=Table3.iloc[:, 2:4]
             st.dataframe(Table4.iloc[:,0:5].set_index('technic number').style.format(precision=0))    
