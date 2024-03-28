@@ -415,10 +415,13 @@ def Table1(V,date,ActiveUsers_id,TypeSession,Patient):
         for Z in Temp['fat power'] :Table[userName].append(Z)
         for Z in Temp['well power'] :Table[userName].append(Z)
         
-    titles=['AppID','Compliance All[%]','Compliance 7 days [%]','Compliance 4 weeks [%]',
-            '<1 practice a day [all]','<1 practice a day [7 days]','<1 practice a day [4 weeks]',
+    titles=['AppID','Twice-a-day adherence from start (%)','Twice-a-day Adherence of last 7days (%)',
+            'Twice-a-day Adherence of last 4 weeks (%)',
+            'Once-a-day # of exercise from start','Once-a-day # of exercise last 7days (%)',
+            'Once-a-day # of exercise last 4 weeks (%)',
             'Level','weeks from start','Lag days in current Level','Total Lag days',
-            'average practice time in minutes[all]','average practice time in minutes[7 days]','average practice time in minutes[4 weeks]',
+            'Daily exercise time from start (min)','Daily exercise time of last 7days (min)',
+            'Daily exercise time of last 4 weeks (min)',
             'sud 1','sud 2','sud 3','sud 4','sud 5','sud 6','sud 7',
             'vas 1','vas 2','vas 3','vas 4','vas 5','vas 6','vas 7',
             'fat 1','fat 2','fat 3','fat 4','fat 5','fat 6','fat 7',

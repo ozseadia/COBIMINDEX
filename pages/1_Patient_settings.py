@@ -97,7 +97,7 @@ def submit_text(message,ind):
     if not(message==""):
         wb = openpyxl.load_workbook(filename)
         ws=wb['Sheet1']
-        Text=str(ws.cell(row=ind, column=13).value) +"|"
+        Text=str(ws.cell(row=ind, column=13).value)+"|" +"\n"
         if not(str(ws.cell(row=ind, column=13).value)=='None'):
             ws.cell(row=ind, column=13).value =Text+str(message)
         else:
@@ -171,8 +171,10 @@ if not(NAME=='.....'):
             excelupdate1(Status,int(ind[0]+2))
             Refrash(ind,PP)
     with col5:
-        Message=st.text_area("insert free text",value="",key='text2')
-        if st.button('Submit text'):
+        with st.form("insert free text",clear_on_submit=True):
+            Message=st.text_area("insert free text",value="",key='text2')
+            submitted = st.form_submit_button("Submit")
+            #if st.button('Submit text'):
             submit_text(Message,int(ind[0]+2))
             Refrash(ind,PP)
 
