@@ -248,9 +248,10 @@ if not(SW=='...'):
                 #Message = st.text_input("insert free text:")
                 Message=st.text_area("insert free text",value="",key='text2')
                 submitted = st.form_submit_button("Submit")
-                submit_text(Message,int(ind[0]+2))
-                Refrash(ind,PP)
-
+                if submitted:
+                    submit_text(Message,int(ind[0]+2))
+                    Refrash(ind,PP)
+                    #Message=[]
             # if st.button('Submit text'):
             #     submit_text(Message,int(ind[0]+2))
             #     Refrash(ind,PP)
