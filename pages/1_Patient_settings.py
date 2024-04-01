@@ -97,11 +97,11 @@ def submit_text(message,ind):
     if not(message==""):
         wb = openpyxl.load_workbook(filename)
         ws=wb['Sheet1']
-        Text=str(ws.cell(row=ind, column=13).value)+"|" +"\n"
+        Text=str(datetime.now())[:-9]+str(ws.cell(row=ind, column=13).value)+"|" +"\n"
         if not(str(ws.cell(row=ind, column=13).value)=='None'):
-            ws.cell(row=ind, column=13).value =Text+str(message)
+            ws.cell(row=ind, column=13).value =str(ws.cell(row=ind, column=13).value)+"\n"+str(message)+str(datetime.now())[:-10]+"|"
         else:
-            ws.cell(row=ind, column=13).value =str(message)
+            ws.cell(row=ind, column=13).value =str(message)+str(datetime.now())[:-10]+"|"
         wb.save(filename)
     #pass         
 
