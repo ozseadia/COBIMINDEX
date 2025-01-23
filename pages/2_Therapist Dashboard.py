@@ -16,18 +16,37 @@ import numpy as np
 import altair as alt
 import plotly.express as px 
 import plotly.graph_objects as go
-import Home as De
+from Functions import render_svg , read_svg,load_data , Table1, PlotyCandlestick #as De
 
 #st.set_page_config(page_title="Patients Dashboard", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+if 'page_config' not in st.session_state:
+    st.session_state['page_config'] = st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+
+
 if 'LogIn_Aprove' not in st.session_state:
     st.session_state['LogIn_Aprove'] = []
-
 if 'Patients' not in st.session_state:
     st.session_state['Patients'] = 1
-#st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
+if 'loaddata' not in st.session_state:    #st.session_state.loaded_data = load_data()
+    T,V,date,userid,ActiveUsers_id=load_data(temp=1)
+    st.session_state['loaddata']=1
+    st.session_state['T']=T
+    st.session_state['V']=V
+    st.session_state['date']=date
+    st.session_state['userid']=userid
+    st.session_state['ActiveUsers_id']=ActiveUsers_id
+
+T=st.session_state['T']
+V=st.session_state['V']
+date=st.session_state['date']
+userid=st.session_state['userid']
+ActiveUsers_id=st.session_state['ActiveUsers_id'] 
+   
+#st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+#st.set_page_config(layout="wide") 
 #path_svg=(r'G:\Oz\fiveer\Dani_Velinchick\KrohnApp\python_codes\pages\SVG\OpenScreenLogo.svg')
-De.render_svg(De.read_svg())
+render_svg(read_svg())
 S_options=['...',
            'Naama Peled-Ironi',
            'Milca Hanukoglu',
@@ -113,29 +132,29 @@ def PlotyMulty(Table2,Ind):
     return(plot)
     pass
 
-def PlotyCandlestick(Table2,Ind):
-    #plot=px.bar(x=Table2.index,y=Table2[Ind])
-    Topen=Ind+"1"
-    Tclose=Ind+"2"
+# def PlotyCandlestick(Table2,Ind):
+#     #plot=px.bar(x=Table2.index,y=Table2[Ind])
+#     Topen=Ind+"1"
+#     Tclose=Ind+"2"
     
-    if Ind=='well':
-        plot = go.Figure(data=[go.Candlestick(x=Table2.index,
-                    open=Table2[Topen],
-                    high=Table2[[Topen,Tclose]].max(axis=1),
-                    low=Table2[[Topen,Tclose]].min(axis=1),
-                    close=Table2[Tclose],
-                    increasing_line_color= 'green', decreasing_line_color= 'red')])
-    else:
-        plot = go.Figure(data=[go.Candlestick(x=Table2.index,
-                    open=Table2[Topen],
-                    high=Table2[[Topen,Tclose]].max(axis=1),
-                    low=Table2[[Topen,Tclose]].min(axis=1),
-                    close=Table2[Tclose],
-                    increasing_line_color= 'red', decreasing_line_color= 'green')])
+#     if Ind=='well':
+#         plot = go.Figure(data=[go.Candlestick(x=Table2.index,
+#                     open=Table2[Topen],
+#                     high=Table2[[Topen,Tclose]].max(axis=1),
+#                     low=Table2[[Topen,Tclose]].min(axis=1),
+#                     close=Table2[Tclose],
+#                     increasing_line_color= 'green', decreasing_line_color= 'red')])
+#     else:
+#         plot = go.Figure(data=[go.Candlestick(x=Table2.index,
+#                     open=Table2[Topen],
+#                     high=Table2[[Topen,Tclose]].max(axis=1),
+#                     low=Table2[[Topen,Tclose]].min(axis=1),
+#                     close=Table2[Tclose],
+#                     increasing_line_color= 'red', decreasing_line_color= 'green')])
         
-    plot.update_layout(xaxis_rangeslider_visible=False)
-    #plot['layout']['xaxis']['autorange'] = "reversed"
-    return plot
+#     plot.update_layout(xaxis_rangeslider_visible=False)
+#     #plot['layout']['xaxis']['autorange'] = "reversed"
+#     return plot
     
 def ComplinesTable(TABLE):
     ind=list(range(0,14))
@@ -179,14 +198,16 @@ def load_data(temp):
     T,V,date,userid,ActiveUsers_id=DB.start()
     return (T,V,date,userid,ActiveUsers_id)    
 
-@st.cache_data(ttl=3600)
-def Table1(V,date,ActiveUsers_id,TypeSession='Morning',):
-    TABLE=DB.Table1(V,date,ActiveUsers_id,'Morning','.....')
-    return (TABLE)
-    
+# @st.cache_data(ttl=3600)
+# def Table1(V,date,ActiveUsers_id,TypeSession='Morning',):
+#     TABLE=DB.Table1(V,date,ActiveUsers_id,'Morning','.....')
+#     return (TABLE)
+   
 st.title('Dashboard')
 #T,V,date,userid,ActiveUsers_id=DB.start()
-T,V,date,userid,ActiveUsers_id=load_data(temp=1)
+
+#T,V,date,userid,ActiveUsers_id=De.load_data(temp=1)
+
 if not(SW=='...'):
     PatientList=Extract_Patien_ListAppId()
     #PatientList=Extract_Patien_List()
@@ -216,7 +237,7 @@ if not(SW=='...'):
             st.dataframe(Tc.style.applymap(highlight_cols1,
                                             subset = pd.IndexSlice[['Lag days in current Level','Total Lag days'],:]).format(precision=0))
             st.subheader("Patients' Index table")
-            col1,col2 = st.columns([1,3])
+            col1,col2 = st.columns([1,1])
             with col1:
                 TypeSession=st.selectbox('Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
             #TABLE=DB.Table1(V,date,ids_List,TypeSession,'.....')
@@ -234,9 +255,10 @@ if not(SW=='...'):
         st.session_state['Patients']=0
         NAME=str(ConvertPatienID2Acount(PatientID,PatientList))
         ind=Table_acounts.index[Table_acounts['acount']==int(NAME)]
-        
         placeholder1.empty()
+        time.sleep(0.01)
         with placeholder1.container():
+            
             Table3,Level,GroupType=DB.Patient_Records(T,V,NAME)
             st.title(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ PatientID + ' Dashboard')
             st.subheader('Level :'+str(int(Level)))
@@ -264,33 +286,100 @@ if not(SW=='...'):
             Table4=DB.technics(V,NAME,date)
             #df1=Table3.iloc[:, 2:4]
             st.dataframe(Table4.iloc[:,0:5].set_index('technic number').style.format(precision=0))    
-            col1,col2 = st.columns([1,3])
-            with col1:
-                TypeSession=st.selectbox('Please Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
-                time.sleep(1)   
-            Table2=DB.userData(V,date,NAME,TypeSession)
+            #col1,col2= st.columns([1,3])
+            #with col1:
+            #    TypeSession=st.selectbox('Please Select Morning or Evenining :sun_with_face:/:first_quarter_moon_with_face:',['Morning','Evening'])
+            #    time.sleep(1)
+            TypeSession='Morning'    
+            Table02=DB.userData(V,date,NAME,TypeSession)
+            Table2=Table02[0:-2]
             #Table3=DB.Patient_Records(T,V,NAME)
             #C=Chart_data(Table2)
-            st.title(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ PatientID + ' ' + TypeSession+ ' indexes results')
+            
+            st.subheader(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ PatientID + ' ' + TypeSession+ ' indexes results')
             #st.dataframe(Table2.style.applymap(highlight_cols).format(precision=0))
             #st.dataframe(Table3.style.apply(apply_formatting))
             #st.altair_chart(C)
-            st.subheader('SUD')
-            plot=De.PlotyCandlestick(Table2,'sud')
-            #plot=De.PlotyMulty(Table2)
-            st.plotly_chart(plot)
-            #st.bar_chart(Table2['sud power'])
-            st.subheader('VAS')
-            plot=De.PlotyCandlestick(Table2,'vas')
-            st.plotly_chart(plot)
-            #st.bar_chart(Table2['vas power'])
-            st.subheader('Fatigue')
-            plot=De.PlotyCandlestick(Table2,'fat')
-            st.plotly_chart(plot)
-            #st.bar_chart(Table2['fat power'])
-            st.subheader('Well being')
-            plot=De.PlotyCandlestick(Table2,'well')
-            st.plotly_chart(plot)
+            col4,col5,col6 = st.columns(3)
+            height=300
+            with col4:
+                try:
+                    #col4.empty()
+                    #st.subheader('SUD')
+                    plot1=PlotyCandlestick(Table2,'sud')
+                    plot1.update_layout(title_text='SUD',title_x=0.4,height=height)
+                #plot=De.PlotyMulty(Table2)
+                    st.plotly_chart(plot1,use_container_width=True)
+                #st.bar_chart(Table2['sud power'])
+                except:
+                    pass
+            with col5:
+                try:
+                    #col5.empty()
+                    #st.subheader('VAS')
+                    plot2=PlotyCandlestick(Table2,'vas')
+                    plot2.update_layout(title_text='VAS',title_x=0.4,height=height)
+                    st.plotly_chart(plot2,use_container_width=True)
+                #st.bar_chart(Table2['vas power'])
+                except:
+                    pass
+            with col6:
+                try:
+                    #col6.empty()
+                    #st.subheader('Fatigue')
+                    plot3=PlotyCandlestick(Table2,'fat')
+                    plot3.update_layout(title_text='Fatigue',title_x=0.4,height=height)
+                    st.plotly_chart(plot3,use_container_width=True)
+                    #st.bar_chart(Table2['fat power'])
+                except:
+                    pass
+                
+            TypeSession='Evening'    
+            Table02=DB.userData(V,date,NAME,TypeSession)
+            Table2=Table02[0:-2]
+            #Table3=DB.Patient_Records(T,V,NAME)
+            #C=Chart_data(Table2)
+            
+            st.subheader(':chart_with_downwards_trend: :chart_with_upwards_trend: Patient '+ PatientID + ' ' + TypeSession+ ' indexes results')
+            #st.dataframe(Table2.style.applymap(highlight_cols).format(precision=0))
+            #st.dataframe(Table3.style.apply(apply_formatting))
+            #st.altair_chart(C)
+            col4,col5,col6 = st.columns(3)
+            with col4:
+                try:
+                    #col4.st.empty()
+                    #st.subheader('SUD')
+                    plot1=PlotyCandlestick(Table2,'sud')
+                    plot1.update_layout(title_text='SUD',title_x=0.4,height=height)
+                #plot=De.PlotyMulty(Table2)
+                    st.plotly_chart(plot1,use_container_width=True)
+                #st.bar_chart(Table2['sud power'])
+                except:
+                    pass
+            with col5:
+                try:
+                    #col5.empty()
+                    #st.subheader('VAS')
+                    plot2=PlotyCandlestick(Table2,'vas')
+                    plot2.update_layout(title_text='VAS',title_x=0.4,height=height)
+                    st.plotly_chart(plot2,use_container_width=True)
+                #st.bar_chart(Table2['vas power'])
+                except:
+                    pass
+            with col6:
+                try:
+                    #col6.empty()
+                    #st.subheader('Fatigue')
+                    plot3=PlotyCandlestick(Table2,'fat')
+                    plot3.update_layout(title_text='Fatigue',title_x=0.4,height=height)
+                    st.plotly_chart(plot3,use_container_width=True)
+                    #st.bar_chart(Table2['fat power'])
+                except:
+                    pass
+            #st.subheader('Wellbeing')
+            #plot4=De.PlotyCandlestick(Table2,'well')
+            #plot4.update_layout(title_text='Wellbeing',title_x=0.5)
+            #st.plotly_chart(plot4)
             #st.bar_chart(Table2['well power'])
     
             #st.bar_chart(pd.DataFrame(chart_data))
@@ -301,7 +390,8 @@ if not(SW=='...'):
         st.session_state['Patients']+=1
         time.sleep(1)
         if st.session_state['Patients']==1 :
-            st.experimental_rerun()
+            #st.experimental_rerun()
+            st.rerun()
 else:
     st.subheader('Please choose Therapist / Assigned Coordinator’ s name')
             

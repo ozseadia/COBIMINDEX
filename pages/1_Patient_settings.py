@@ -11,10 +11,14 @@ from datetime import timedelta ,datetime
 import numpy as np
 import streamlit as st
 import openpyxl
-import Home as De
+from Functions import render_svg, read_svg
 from PIL import Image
 
 global path_svg
+
+if 'page_config' not in st.session_state:
+    st.session_state['page_config'] = st.set_page_config(page_title="Patient details settings", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+
 
 if 'text3' not in st.session_state:
     st.session_state['text3'] = ""
@@ -118,7 +122,7 @@ def clear_text():
     st.session_state["text3"]=""
 
 #st.session_state["text"]=""
-De.render_svg(De.read_svg())
+render_svg(read_svg())
 st.title('Patient details settings')
 options=list(Table_acounts.acount)
 options.insert(0,'.....')
@@ -179,6 +183,6 @@ if not(NAME=='.....'):
             Refrash(ind,PP)
 
             
-with open(filename, 'rb') as my_file:
-    st.download_button(label = 'Download', data = my_file, file_name = 'acount and passwords.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')   
+#with open(filename, 'rb') as my_file:
+#    st.download_button(label = 'Download', data = my_file, file_name = 'acount and passwords.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')   
     
