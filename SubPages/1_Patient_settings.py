@@ -170,7 +170,7 @@ if not(NAME=='.....'):
         
     col4, col5 ,col6 = st.columns(3)
     with col4:    
-        Status=st.selectbox('Patient Status',['New','Working_ok','Need_attention','blocked'])
+        Status=st.selectbox('Patient Status',['New','Working_ok','Need_attention','blocked','Study_completed'])
         if st.button('Submit status'):
             excelupdate1(Status,int(ind[0]+2))
             Refrash(ind,PP)

@@ -167,7 +167,12 @@ def Extract_Patien_List():
     a=Table_acounts.query('Therapist==@SW or Coordinator==@SW')
     return a['acount']
 def Extract_Patien_ListAppId():
+    B1=str('blocked')
+    B2=str('Study_completed')
+    #Patient_Status==Study_completed or
     a=Table_acounts.query('Therapist==@SW or Coordinator==@SW')
+    a=a.query('Patient_Status!=@B1')
+    a=a.query('Patient_Status!=@B2')
     return a
 def ReplaceKeys(T,PatientList):
     for i in PatientList.index:
